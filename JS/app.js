@@ -26,7 +26,7 @@ getQuizzes();
 function quizzSelected(option, id) {
     quizz = id;
 
-    let main = document.querySelector(".container");
+    let main = document.querySelector(".quizzesList");
     let quizzSelected = document.querySelector(".quizzSelected");
 
     main.classList.add("hide");
@@ -44,6 +44,7 @@ function startQuizz(response) {
 function hideContent(element){
     element.closest(".quizzesList").classList.add("hide");
 }
+
 
 // function postQuizz {
 
