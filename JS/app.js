@@ -38,7 +38,7 @@ function quizzSelected(option, id) {
 function startQuizz(response) {
     let quizzTitle = document.querySelector(".quizzSelectedTitle");
 
-    quizzTitle.innerHTML = `<span>${response.data[quizz].title}</span><img src="${response.data[quizz].image}">`;
+    quizzTitle.innerHTML = `<span class="quizzSelectedBackG"></span><span class="selectedTitle">${response.data[quizz].title}</span><img src="${response.data[quizz].image}">`;
 }
 
 function hideContent(element){
