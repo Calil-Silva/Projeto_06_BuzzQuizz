@@ -61,6 +61,11 @@ h2 {
     font-size: 20px;
 }
 
+.otherQuizzes {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
 
 
 /* @media (min-width: 1100px) {
