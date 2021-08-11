@@ -41,6 +41,10 @@ function startQuizz(response) {
     quizzTitle.innerHTML = `<span>${response.data[quizz].title}</span><img src="${response.data[quizz].image}">`;
 }
 
+function hideContent(element){
+    element.closest(".quizzesList").classList.add("hide");
+}
+
 // function postQuizz {
 
     // let quizz = {
