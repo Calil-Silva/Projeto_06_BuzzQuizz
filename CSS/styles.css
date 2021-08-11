@@ -73,11 +73,6 @@ h2 {
     margin-bottom: 12px;
 }
 
-.otherQuizzes {
-    position: relative;
-    display: flex;
-    justify-content: center;
-}
 
 .quizzImageGradient{
     position:relative;
