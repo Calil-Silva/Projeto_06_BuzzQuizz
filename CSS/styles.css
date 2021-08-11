@@ -3,7 +3,7 @@
     font-family: 'Roboto', sans-serif;
 }
 
-.container{
+.container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -40,7 +40,7 @@ h1 {
     align-items: center;
 }
 
-.menuQuizzes{
+.menuQuizzes {
     width: 1051px;
 }
 
@@ -64,7 +64,7 @@ h2 {
     color: #EC362D;
     border: 1px dashed #EC362D;
     border-radius: 50px;
-    background-color:  #fff;
+    background-color: #fff;
     margin: 0 auto;
 }
 
@@ -75,33 +75,32 @@ h2 {
     margin-bottom: 12px;
 }
 
-
-.quizzImageGradient{
+.quizzImageGradient {
     width: 340px;
-    position:relative;
-    display:inline-block;
+    position: relative;
+    display: inline-block;
 }
 
-.quizzImageGradient::after{
-    content:'';
-    position:absolute;
-    left:0; 
-    top:0;
-    width:100%; 
-    height:100%;
-    display:inline-block;
+.quizzImageGradient::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: inline-block;
     border-radius: 5px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 65.1%, #000000 100%);
 }
 
-.quizzContent{
+.quizzContent {
     display: flex;
     align-items: flex-end;
     justify-content: center;
     margin-bottom: 19px;
 }
 
-.quizzImage{
+.quizzImage {
     width: 340px;
     height: 181px;
     border-radius: 5px;
@@ -109,7 +108,7 @@ h2 {
     display: block;
 }
 
-.quizzTitle{
+.quizzTitle {
     font-family: 'Roboto', sans-serif;
     font-size: 19px;
     color: #fff;
@@ -125,20 +124,46 @@ h2 {
 
 .quizzSelectedTitle {
     height: 227px;
-    background-color: blueviolet;
     margin: 69px 0 42px;
 }
 
-/*@media (min-width: 1100px) {
-.otherQuizzes{
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    margin-top: 12px;
+.quizzSelectedTitle img {
+    height: 227px;
+    width: 100%;
+    position: relative;
+    object-fit: cover;
+}
+
+.quizzSelectedTitle .selectedTitle {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 39px;
+    color: #fff;
+    position: absolute;
+    z-index: 1;
+    text-align: center;
+}
+
+.quizzSelectedTitle .quizzSelectedBackG {
+    background-color: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    height: 227px;
+    position: absolute;
+    position: absolute;
+    z-index: 1;
+}
+
+@media (min-width: 1100px) {
+    .otherQuizzes {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-top: 12px;
+    }
 }
 
 @media (max-width: 1100px) {
-    .myQuizz, .menuQuizzes{
+    .myQuizz, .menuQuizzes {
         width: 340px;
     }
 }
