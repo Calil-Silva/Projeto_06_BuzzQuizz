@@ -5,6 +5,7 @@
 
 h1 {
     height: 69px;
+    width: 100%;
     background-color: #EC362D;
     box-shadow: 0px 4px 4px 0px #00000040;
     display: flex;
@@ -12,8 +13,56 @@ h1 {
     align-items: center;
 }
 
-.titulo {
+.title {
     font-family: 'Roboto', sans-serif;
     font-weight: 700;
     font-size: 37px;
+    position: fixed;
+    top: 0;
 }
+
+.myQuizz {
+    width: 1051px;
+    height: 181px;
+    border: 1px dashed #D4D4D4;
+    margin: 146px auto 77px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h2 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    color: #B9B9B9;
+}
+
+.message {
+    width: 155px;
+    margin: 40px 0 20px;
+    text-align: center;
+}
+
+.createQuizz {
+    height: 40px;
+    width: 151px;
+    font-family: 'Roboto', sans-serif;
+    color: #EC362D;
+    border: 1px dashed #EC362D;
+    border-radius: 50px;
+    background-color:  #fff;
+    margin: 0 auto;
+}
+
+.name {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+
+
+/* @media (min-width: 1100px) {
+
+} */
