@@ -19,7 +19,7 @@ function listOtherQuizzes(response) {
 
 getQuizzes();
 
-function postQuizz {
+// function postQuizz {
 
     // let quizz = {
     //     id: 1,
@@ -92,6 +92,6 @@ function postQuizz {
     // }
 
     // let promisse = axios.postQuizz(`${URL_API}`, quizz);
-    
-}
+
+// }
 
