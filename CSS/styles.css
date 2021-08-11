@@ -11,16 +11,16 @@
 }
 
 h1 {
-    height: 69px;
-    width: 100%;
-    background-color: #EC362D;
-    box-shadow: 0px 4px 4px 0px #00000040;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .title {
+    height: 69px;
+    width: 100%;
+    background-color: #EC362D;
+    box-shadow: 0px 4px 4px 0px #00000040;
     font-family: 'Roboto', sans-serif;
     font-weight: 700;
     font-size: 37px;
@@ -50,7 +50,7 @@ h2 {
 }
 
 .message {
-    width: 155px;
+    width: 170px;
     margin: 40px 0 20px;
     text-align: center;
 }
@@ -112,6 +112,17 @@ h2 {
     word-wrap: break-word;
     margin-bottom: 7px;
 }
+
+.hide {
+    display: none;
+}
+
+.quizzSelectedTitle {
+    height: 227px;
+    background-color: blueviolet;
+    margin: 69px 0 42px;
+}
+
 
 /*@media (min-width: 1100px) {
 

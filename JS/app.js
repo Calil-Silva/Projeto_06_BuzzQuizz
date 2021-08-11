@@ -1,23 +1,45 @@
 const URL_API = "https://mock-api.bootcamp.respondeai.com.br/api/v3/buzzquizz/quizzes"
+let quizz;
 
 function getQuizzes() {
-
     let promise = axios.get(`${URL_API}`);
 
     promise.then(listOtherQuizzes);
+}
 
+function chooseQuizz() {
+    let promise = axios.get(`${URL_API}`);
+
+    promise.then(startQuizz);
 }
 
 function listOtherQuizzes(response) {
-
     let listQuizzes = document.querySelector(".otherQuizzes");
 
     for(let i = 0; i < response.data.length; i++) {
-        listQuizzes.innerHTML += `<li class="quizzContent quizzImageGradient" ><span class="quizzTitle">${response.data[i].title}</span><img class="quizzImage" src="${response.data[i].image}"></li>`
+        listQuizzes.innerHTML += `<li class="quizzContent quizzImageGradient" onclick="quizzSelected(this, ${i});"><span class="quizzTitle">${response.data[i].title}</span><img class="quizzImage" src="${response.data[i].image}"></li>`
     }
 }
 
 getQuizzes();
+
+function quizzSelected(option, id) {
+    quizz = id;
+
+    let main = document.querySelector(".container");
+    let quizzSelected = document.querySelector(".quizzSelected");
+
+    main.classList.add("hide");
+    quizzSelected.classList.remove("hide");
+
+    chooseQuizz()
+}
+
+function startQuizz(response) {
+    let quizzTitle = document.querySelector(".quizzSelectedTitle");
+
+    quizzTitle.innerHTML = `<span>${response.data[quizz].title}</span><img src="${response.data[quizz].image}">`;
+}
 
 // function postQuizz {
 
