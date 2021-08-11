@@ -13,7 +13,7 @@ function listOtherQuizzes(response) {
     let listQuizzes = document.querySelector(".otherQuizzes");
 
     for(let i = 0; i < response.data.length; i++) {
-        listQuizzes.innerHTML += `<li><span>${response.data[i].title}</span><img src="${response.data[i].image}"></li>`
+        listQuizzes.innerHTML += `<li class="quizzContent quizzImageGradient" ><span class="quizzTitle">${response.data[i].title}</span><img class="quizzImage" src="${response.data[i].image}"></li>`
     }
 }
 
