@@ -16,7 +16,7 @@ function chooseQuizz() {
 function listOtherQuizzes(response) {
     let listQuizzes = document.querySelector(".otherQuizzes");
 
-    for(let i = 0; i < response.data.length; i++) {
+    for (let i = 0; i < response.data.length; i++) {
         listQuizzes.innerHTML += `<li class="quizzContent quizzImageGradient" onclick="quizzSelected(this, ${i});"><span class="quizzTitle">${response.data[i].title}</span><img class="quizzImage" src="${response.data[i].image}"></li>`
     }
 }
@@ -33,18 +33,52 @@ function quizzSelected(option, id) {
     quizzSelected.classList.remove("hide");
 
     chooseQuizz()
+    getQuestions()
 }
 
 function startQuizz(response) {
     let quizzTitle = document.querySelector(".quizzSelectedTitle");
 
     quizzTitle.innerHTML = `<span class="quizzSelectedBackG"></span><span class="selectedTitle">${response.data[quizz].title}</span><img src="${response.data[quizz].image}">`;
+
+    loadQuestions(response)
 }
 
-function hideContent(element){
+function hideContent(element) {
     element.closest(".quizzesList").classList.add("hide");
 }
 
+function loadQuestions(response) {
+    let question = document.querySelector(".questions");
+
+
+    for (let i = 0; i < response.data[quizz].questions.length; i++) {
+        question.innerHTML +=
+            `
+            <div class="nthQuestion">
+                <div class="qTitle">
+                    <h3>${response.data[quizz].questions[i].title}</h3>
+                </div>
+                <ul class="answers a${i}"></ul>
+            </div>
+            `
+        loadAnswers(response, i);
+    }
+}
+
+function loadAnswers(response, i) {
+    let answer = document.querySelector(".answers.a" + i);
+
+    for (let j = 0; j < response.data[quizz].questions[i].answers.length; j++) {
+        answer.innerHTML +=
+            `
+            <li>
+                <div><img src="${response.data[quizz].questions[i].answers[j].image}"></div>
+                <span>${response.data[quizz].questions[i].answers[j].text}</span>
+            </li>
+            `
+    }
+}
 
 // function postQuizz {
 
