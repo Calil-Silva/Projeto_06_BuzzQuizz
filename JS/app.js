@@ -1,5 +1,11 @@
 const URL_API = "https://mock-api.bootcamp.respondeai.com.br/api/v3/buzzquizz/quizzes"
 let quizz;
+let noRepetitionArray = [];
+
+
+function comparador() { 
+	return Math.random() - 0.5; 
+}
 
 function getQuizzes() {
     let promise = axios.get(`${URL_API}`);
@@ -33,7 +39,6 @@ function quizzSelected(option, id) {
     quizzSelected.classList.remove("hide");
 
     chooseQuizz()
-    getQuestions()
 }
 
 function startQuizz(response) {
@@ -65,19 +70,34 @@ function loadQuestions(response) {
     }
 }
 
+function aleatoryArray(response, i) {
+    let myArray = [];
+
+    for(let k = 0; k < response.data[quizz].questions[i].answers.length; k++) {
+        myArray.push(k);
+        noRepetitionArray = [... new Set(myArray)]
+        noRepetitionArray.sort(comparador);
+    }
+
+}
+
 function loadAnswers(response, i) {
     let answer = document.querySelector(".answers.a" + i);
+    
+    aleatoryArray(response, i);
 
     for (let j = 0; j < response.data[quizz].questions[i].answers.length; j++) {
         answer.innerHTML +=
             `
             <li>
-                <div><img src="${response.data[quizz].questions[i].answers[j].image}"></div>
-                <span>${response.data[quizz].questions[i].answers[j].text}</span>
+                <div><img src="${response.data[quizz].questions[i].answers[noRepetitionArray[j]].image}"></div>
+                <span>${response.data[quizz].questions[i].answers[noRepetitionArray[j]].text}</span>
             </li>
-            `
+            `;
     }
 }
+
+
 
 // function postQuizz {
 
