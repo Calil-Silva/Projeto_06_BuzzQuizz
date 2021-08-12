@@ -92,6 +92,7 @@ function loadAnswers(response, i) {
             `
             <li onclick="selectAnswer(this, ${i});">
                 <div><img src="${response.data[quizz].questions[i].answers[noRepetitionArray[j]].image}"></div>
+                <span class="hide" onclick="isCorrectAnswer(this)">${response.data[quizz].questions[i].answers[noRepetitionArray[j]].isCorrectAnswer}</span>
                 <span>${response.data[quizz].questions[i].answers[noRepetitionArray[j]].text}</span>
             </li>
             `;
@@ -104,22 +105,26 @@ function loadTitleColor(response, i) {
 
 function selectAnswer(option, index) {
     let answersList = document.querySelectorAll(`.answers.a${index} li`);
+    let trueOrFalse = option.querySelector(".hide").innerHTML;
+    let textAnswer = option.querySelector("span:last-child");
+
+    console.log(trueOrFalse)
 
     for(let z = 0; z < answersList.length; z++) {
 
         if(option.classList.contains("opacity")) {
             break;
+        } else if(trueOrFalse === "true") {
+            answersList[z].classList.add("opacity");
+            option.classList.remove("opacity");
+            textAnswer.style.color ="green";
         } else {
             answersList[z].classList.add("opacity");
             option.classList.remove("opacity");
+            textAnswer.style.color ="red";
         }
     }
 }
-
-// function isCorrectAnswer(response, this) {
-    
-// }
-
 
 // function postQuizz {
 
