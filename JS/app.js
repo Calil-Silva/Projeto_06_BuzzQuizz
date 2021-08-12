@@ -106,11 +106,19 @@ function selectAnswer(option, index) {
     let answersList = document.querySelectorAll(`.answers.a${index} li`);
 
     for(let z = 0; z < answersList.length; z++) {
-        answersList[z].classList.add("opacity");
-    }
 
-    option.classList.remove("opacity");
+        if(option.classList.contains("opacity")) {
+            break;
+        } else {
+            answersList[z].classList.add("opacity");
+            option.classList.remove("opacity");
+        }
+    }
 }
+
+// function isCorrectAnswer(response, this) {
+    
+// }
 
 
 // function postQuizz {
