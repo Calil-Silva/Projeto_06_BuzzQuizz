@@ -60,13 +60,14 @@ function loadQuestions(response) {
         question.innerHTML +=
             `
             <div class="nthQuestion">
-                <div class="qTitle">
+                <div class="qTitle q${i}">
                     <h3>${response.data[quizz].questions[i].title}</h3>
                 </div>
                 <ul class="answers a${i}"></ul>
             </div>
             `
         loadAnswers(response, i);
+        loadTitleColor(response, i);
     }
 }
 
@@ -95,6 +96,10 @@ function loadAnswers(response, i) {
             </li>
             `;
     }
+}
+
+function loadTitleColor(response, i) {
+    document.querySelector(".qTitle.q" + i).style.backgroundColor = response.data[quizz].questions[i].color;
 }
 
 
