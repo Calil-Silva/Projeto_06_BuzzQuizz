@@ -216,3 +216,7 @@ h2 {
     margin: 20px 0 20px;
     object-fit: cover;
 }
+
+.opacity {
+    opacity: 0.3;
+}

@@ -90,7 +90,7 @@ function loadAnswers(response, i) {
     for (let j = 0; j < response.data[quizz].questions[i].answers.length; j++) {
         answer.innerHTML +=
             `
-            <li>
+            <li onclick="selectAnswer(this, ${i});">
                 <div><img src="${response.data[quizz].questions[i].answers[noRepetitionArray[j]].image}"></div>
                 <span>${response.data[quizz].questions[i].answers[noRepetitionArray[j]].text}</span>
             </li>
@@ -102,6 +102,15 @@ function loadTitleColor(response, i) {
     document.querySelector(".qTitle.q" + i).style.backgroundColor = response.data[quizz].questions[i].color;
 }
 
+function selectAnswer(option, index) {
+    let answersList = document.querySelectorAll(`.answers.a${index} li`);
+
+    for(let z = 0; z < answersList.length; z++) {
+        answersList[z].classList.add("opacity");
+    }
+
+    option.classList.remove("opacity");
+}
 
 
 // function postQuizz {
