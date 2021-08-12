@@ -51,7 +51,6 @@ function hideContent(element) {
 function loadQuestions(response) {
     let question = document.querySelector(".questions");
 
-
     for (let i = 0; i < response.data[quizz].questions.length; i++) {
         question.innerHTML +=
             `
