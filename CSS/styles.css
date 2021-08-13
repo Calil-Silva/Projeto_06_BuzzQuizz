@@ -257,7 +257,7 @@ ion-icon{
     height: 676px;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.05);
     padding: 34px;
-    margin: 0 auto 42px;
+    margin: 0 auto 103px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -306,7 +306,7 @@ ion-icon{
     background-color: #fff;
     margin: 0 auto 42px;
     padding: 34px;
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: space-between;
 }
@@ -337,7 +337,7 @@ ion-icon{
 
 .result img {
     width: 364px;
-    height: 273px;
+    height: 229px;
     object-fit: cover;
 }
 
@@ -345,8 +345,4 @@ ion-icon{
     width: 300px;
     text-align: justify;
     height: 100%;
-}
-
-.hidden {
-    visibility: hidden;
 }
