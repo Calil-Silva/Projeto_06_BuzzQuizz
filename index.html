@@ -2,17 +2,16 @@
 <html lang="pt-br">
 <head>
     <meta charset=" UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="CSS/styles.css">
-<link rel="stylesheet" href="CSS/reset.css">
-<link rel="stylesheet" href="JS/app.js">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="CSS/styles.css">
+    <link rel="stylesheet" href="CSS/reset.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap" /> 
 
-<title>BuzzQuizz</title>
+    <title>BuzzQuizz</title>
 </head>
 
 <body>
@@ -53,7 +52,106 @@
             <h1 class="quizzSelectedTitle"></h1>
         </header>
     </section>
+
+    <main class="quizzCreationInfo hide">
+        <section class="quizInfo">
+            <h1 class="quizzInfoTitle">Comece pelo começo</h1>
+            <div class="quizzInfoContainer">
+                <form class="quizInfoForm">
+                    <input type="text" placeholder="   Título do seu quizz" />
+                    <input type="url" placeholder="   URL da imagem do seu quizz" />
+                    <input type="number" min="0" step="1" placeholder="   Quantidade de perguntas do quizz" />
+                    <input type="number" min="0" step="1" placeholder="   Quantidade de níveis do quizz" />
+                </form>
+            </div>
+            <button class="quizzInfoButton">Prosseguir para criar perguntas</button>
+        </section>
+    </main>
+
+    <main class="quizzCreationQuestions hide">
+        <section class="quizzQuestions">
+            <h1 class="quizzQuestionsTitle">Crie suas perguntas</h1>
+            <div class="quizzQuestionContainer">
+                <h1 class="quizQuestionsFormTitle">Pergunta 1</h1>
+                <form class="quizQuestionsForm">
+                    <input type="text" placeholder="   Texto da pergunta" />
+                    <input type="text" placeholder="   Cor de fundo da pergunta" />
+                </form>
+                <h1 class="quizQuestionsFormTitle">Resposta correta</h1>
+                <form class="quizQuestionsForm">
+                    <input type="text" placeholder="   Resposta correta" />
+                    <input type="url" placeholder="   URL da imagem" />
+                </form>
+                <h1 class="quizQuestionsFormTitle">Respostas incorretas</h1>
+                <form class="quizQuestionsForm">
+                    <div class="quizQuestionsFormIncorrect">
+                        <input type="text" placeholder="   Resposta incorreta 1" />
+                        <input type="url" placeholder="   URL da imagem 1" />
+                    </div>
+                    <div class="quizQuestionsFormIncorrect">
+                        <input type="text" placeholder="   Resposta incorreta 2" />
+                        <input type="url" placeholder="   URL da imagem 2" />
+                    </div>
+                    <div class="quizQuestionsFormIncorrect">
+                        <input type="text" placeholder="   Resposta incorreta 3" />
+                        <input type="url" placeholder="   URL da imagem 3" />
+                    </div>
+                </form>
+            </div>
+            <div class="quizzQuestionContainer">
+                <form class="quizQuestionsFormUnfolded">
+                    <h1 class="quizQuestionsFormTitle">Pergunta 2</h1>
+                    <ion-icon name="create-outline"></ion-icon>
+                </form>
+            </div>
+            <div class="quizzQuestionContainer">
+                <form class="quizQuestionsFormUnfolded">
+                    <h1 class="quizQuestionsFormTitle">Pergunta 3</h1>
+                    <ion-icon name="create-outline"></ion-icon>
+                </form>
+            </div>
+            <button class="quizzInfoButton">Prosseguir para criar níveis</button>
+        </section>
+    </main>
+
+    <main class="quizzCreationLevels hide">
+        <section class="quizzLevels">
+            <h1 class="quizzLevelsTitle">Agora decida os níveis</h1>
+            <div class="quizzLevelsContainer">
+                <h1 class="quizLevelsFormTitle">Nível 1</h1>
+                <form class="quizLevelsForm">
+                    <input type="text" placeholder="   Título do nível" />
+                    <input type="text" placeholder="   % de acerto mínima" />
+                    <input type="url" placeholder="   URL da imagem do nível" />
+                    <input type="text" placeholder="   Descrição do nível" />
+                </form>
+            </div>
+            <div class="quizzLevelsContainer">
+                <form class="quizLevelsFormUnfolded">
+                    <h1 class="quizLevelsFormTitle">Nível 2</h1>
+                    <ion-icon name="create-outline"></ion-icon>
+                </form>
+            </div>
+            <div class="quizzLevelsContainer">
+                <form class="quizLevelsFormUnfolded">
+                    <h1 class="quizLevelsFormTitle">Nível 3</h1>
+                    <ion-icon name="create-outline"></ion-icon>
+                </form>
+            </div>
+            <button class="quizzInfoButton">Finalizar Quizz</button>
+        </section>
+    </main>
+
+    <main class="quizzCreationSuccess hide">
+        <section class="quizzSuccess">
+            <h1 class="quizzSuccessTitle">Seu quizz está pronto!</h1>
+            <button class="quizzInfoButton">Acessar Quizz</button>
+            <button class="quizzInfoButton">Voltar para home</button>
+        </section>
+    </main>
     
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="JS/app.js"></script>
 </body>

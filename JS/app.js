@@ -42,7 +42,9 @@ function startQuizz(response) {
 }
 
 function hideContent(element){
+    const quizzCreation = document.querySelector(".quizzCreationSuccess");
     element.closest(".quizzesList").classList.add("hide");
+    quizzCreation.classList.remove("hide");
 }
 
 // function postQuizz {
