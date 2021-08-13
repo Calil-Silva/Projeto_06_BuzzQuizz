@@ -59,7 +59,7 @@ function loadQuestions(response) {
     for (let i = 0; i < response.data[quizz].questions.length; i++) {
         question.innerHTML +=
             `
-            <div class="nthQuestion">
+            <div class="nthQuestion n${i}">
                 <div class="qTitle q${i}">
                     <h3>${response.data[quizz].questions[i].title}</h3>
                 </div>
@@ -122,6 +122,19 @@ function selectAnswer(option, index) {
             answersList[z].classList.add("opacity");
             option.classList.remove("opacity");
             textAnswer.style.color ="red";
+        }
+    }
+    scrollNextQuestion(index);
+}
+
+function scrollNextQuestion(index) {
+    let answersList = document.querySelectorAll(`.answers.a${index} li`);
+    const nextList = document.querySelector(`.nthQuestion.n${index + 1}`);
+    console.log(nextList);
+
+    for(let z = 0; z < answersList.length; z++) {
+        if(answersList[z].classList.contains("opacity")) {
+            setTimeout(() => {nextList.scrollIntoView()}, 2000);
         }
     }
 }
