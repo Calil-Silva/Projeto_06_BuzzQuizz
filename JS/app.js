@@ -1,6 +1,9 @@
 const URL_API = "https://mock-api.bootcamp.respondeai.com.br/api/v3/buzzquizz/quizzes"
 let quizz;
 let noRepetitionArray = [];
+let rights = 0;
+let score = 0;
+let counterOne = 0;
 
 const quiz = {
     title: "",
@@ -26,6 +29,12 @@ function chooseQuizz() {
     promise.then(startQuizz);
 }
 
+function loadScore() {
+    let promise = axios.get(`${URL_API}`);
+
+    promise.then(quizzResult);
+}
+
 function listOtherQuizzes(response) {
     let listQuizzes = document.querySelector(".otherQuizzes");
 
@@ -45,7 +54,7 @@ function quizzSelected(option, id) {
     main.classList.add("hide");
     quizzSelected.classList.remove("hide");
 
-    chooseQuizz()
+    chooseQuizz();
 }
 
 function startQuizz(response) {
@@ -66,11 +75,12 @@ function loadQuestions(response) {
     for (let i = 0; i < response.data[quizz].questions.length; i++) {
         question.innerHTML +=
             `
-            <div class="nthQuestion n${i}">
+            <div class="nthQuestion">
                 <div class="qTitle q${i}">
                     <h3>${response.data[quizz].questions[i].title}</h3>
                 </div>
                 <ul class="answers a${i}"></ul>
+                <div class="nextQuestions n${i}"></div>
             </div>
             `
         loadAnswers(response, i);
@@ -104,6 +114,7 @@ function loadAnswers(response, i) {
             </li>
             `;
     }
+
 }
 
 function loadTitleColor(response, i) {
@@ -114,6 +125,8 @@ function selectAnswer(option, index) {
     let answersList = document.querySelectorAll(`.answers.a${index} li`);
     let trueOrFalse = option.querySelector(".hide").innerHTML;
     let textAnswer = option.querySelector("span:last-child");
+    let answers = document.querySelectorAll(".answers");
+    let z = 0;
 
     console.log(trueOrFalse)
 
@@ -125,25 +138,65 @@ function selectAnswer(option, index) {
             answersList[z].classList.add("opacity");
             option.classList.remove("opacity");
             textAnswer.style.color ="green";
+            
         } else {
             answersList[z].classList.add("opacity");
             option.classList.remove("opacity");
             textAnswer.style.color ="red";
         }
     }
+
+    if(trueOrFalse === "true") {
+        rights++;
+
+        score = Math.round((rights / answers.length) * 100);
+        console.log(score);
+
+    };
+
+    counterOne++
+
     scrollNextQuestion(index);
+
+    if(counterOne === answers.length) {
+        loadScore()
+    }
+
 }
 
 function scrollNextQuestion(index) {
     let answersList = document.querySelectorAll(`.answers.a${index} li`);
-    const nextList = document.querySelector(`.nthQuestion.n${index + 1}`);
-    console.log(nextList);
+    const nextList = document.querySelector(`.nextQuestions.n${index}`);
 
     for(let z = 0; z < answersList.length; z++) {
         if(answersList[z].classList.contains("opacity")) {
             setTimeout(() => {nextList.scrollIntoView()}, 2000);
         }
     }
+}
+
+function quizzResult(response) {
+    let quizzScoreCard = document.querySelector(".result");
+    let counterTwo = 0;
+
+    quizzScoreCard.style.display = "flex";
+
+    for(let z = 0; z < response.data[quizz].levels.length; z++) {
+        
+        if(response.data[quizz].levels[z].minValue <= score) {
+            counterTwo++;
+        };
+        quizzScoreCard.innerHTML = 
+    `
+    <div class="resultTitle">
+                <h3>${score}% de acerto: ${response.data[quizz].levels[counterTwo - 1].title}</h3>
+            </div>
+            <div>
+                <span><img src="${response.data[quizz].levels[counterTwo - 1].image}"></span>
+                <p>${response.data[quizz].levels[counterTwo - 1].text}</p>
+            </div>
+    `;
+    };
 }
 
 function loadInterface(element){
