@@ -136,11 +136,12 @@ function selectAnswer(option, index) {
             break;
         } else if(trueOrFalse === "true") {
             answersList[z].classList.add("opacity");
+            answersList[z].onclick = null;
             option.classList.remove("opacity");
             textAnswer.style.color ="green";
-            
         } else {
             answersList[z].classList.add("opacity");
+            answersList[z].onclick = null;
             option.classList.remove("opacity");
             textAnswer.style.color ="red";
         }
@@ -159,8 +160,11 @@ function selectAnswer(option, index) {
     scrollNextQuestion(index);
 
     if(counterOne === answers.length) {
-        loadScore()
+        loadScore();
     }
+
+    console.log(counterOne);
+    console.log(answers.length);
 
 }
 
