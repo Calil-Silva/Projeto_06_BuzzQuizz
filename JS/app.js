@@ -1,7 +1,8 @@
 const URL_API = "https://mock-api.bootcamp.respondeai.com.br/api/v3/buzzquizz/quizzes"
 let quizz;
 let noRepetitionArray = [];
-
+let rights = 0;
+let note = 0;
 
 function comparador() { 
 	return Math.random() - 0.5; 
@@ -38,7 +39,7 @@ function quizzSelected(option, id) {
     main.classList.add("hide");
     quizzSelected.classList.remove("hide");
 
-    chooseQuizz()
+    chooseQuizz();
 }
 
 function startQuizz(response) {
@@ -51,7 +52,6 @@ function startQuizz(response) {
 
 function hideContent(element) {
     element.closest(".quizzesList").classList.add("hide");
-    quizzCreation.classList.remove("hide");
 }
 
 function loadQuestions(response) {
@@ -108,6 +108,7 @@ function selectAnswer(option, index) {
     let answersList = document.querySelectorAll(`.answers.a${index} li`);
     let trueOrFalse = option.querySelector(".hide").innerHTML;
     let textAnswer = option.querySelector("span:last-child");
+    let answers = document.querySelectorAll(".answers");
 
     console.log(trueOrFalse)
 
@@ -119,12 +120,21 @@ function selectAnswer(option, index) {
             answersList[z].classList.add("opacity");
             option.classList.remove("opacity");
             textAnswer.style.color ="green";
+            
         } else {
             answersList[z].classList.add("opacity");
             option.classList.remove("opacity");
             textAnswer.style.color ="red";
         }
     }
+
+    if(trueOrFalse === "true") {
+        rights++;
+
+        note = Math.round((rights / answers.length) * 100);
+
+    };
+
     scrollNextQuestion(index);
 }
 
@@ -138,6 +148,10 @@ function scrollNextQuestion(index) {
             setTimeout(() => {nextList.scrollIntoView()}, 2000);
         }
     }
+}
+
+function quizzResult() {
+    let quizzPoins = 
 }
 
 // function postQuizz {
