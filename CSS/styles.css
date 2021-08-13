@@ -121,6 +121,7 @@ h2 {
     z-index: 1;
     word-wrap: break-word;
     margin-bottom: 7px;
+    text-align: center;
 }
 
 .hide {

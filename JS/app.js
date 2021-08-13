@@ -2,6 +2,13 @@ const URL_API = "https://mock-api.bootcamp.respondeai.com.br/api/v3/buzzquizz/qu
 let quizz;
 let noRepetitionArray = [];
 
+const quiz = {
+    title: "",
+    image: "",
+    questions: [],
+    levels: []
+}
+
 
 function comparador() { 
 	return Math.random() - 0.5; 
@@ -50,8 +57,7 @@ function startQuizz(response) {
 }
 
 function hideContent(element) {
-    element.closest(".quizzesList").classList.add("hide");
-    quizzCreation.classList.remove("hide");
+    element.classList.add("hide");
 }
 
 function loadQuestions(response) {
@@ -68,7 +74,7 @@ function loadQuestions(response) {
             </div>
             `
         loadAnswers(response, i);
-        loadTitleColor(response, i);
+        loadTitleColor(response, i);    //console.log(visibleStructure)
     }
 }
 
@@ -138,6 +144,118 @@ function scrollNextQuestion(index) {
             setTimeout(() => {nextList.scrollIntoView()}, 2000);
         }
     }
+}
+
+function loadInterface(element){
+    const visibleStructure = element.closest("main");
+    const invisibleStructure = visibleStructure.nextElementSibling;
+    hideContent(visibleStructure);
+    invisibleStructure.classList.remove("hide");
+    fillQuestions(invisibleStructure.querySelector("section"));
+}
+
+function validateInput(element){
+    let form = element.closest("section").querySelector("form");
+    switch(form.className){
+        case "quizInfoForm":
+            if(form[0].value.length < 20 || form[0].value.length > 65 || !urlValidation(form[1].value) || form[2].value < 3 || form[3].value < 2){
+                alert("Por favor, preencha os dados corretamente.");
+                break;
+            } else{
+                quiz.name = form[0].value;
+                quiz.image = form[1].value;
+                quiz.questions.length = form[2].value;
+                quiz.levels.length = form[3].value;
+                loadInterface(element);
+                break;
+            }
+        case "quizQuestionsForm":
+            
+            form = element.closest("section").querySelectorAll(".quizQuestionsForm");
+            console.log(form[2][0])   
+            
+    }
+
+}
+
+function fillQuestions(element){
+    if(quiz.questions.length === 0){
+        return;
+    }
+    
+    for(let i = 0; i < quiz.questions.length; i++){
+        element.innerHTML += questionsStructure(i);
+        //`<div class="quizzQuestionContainer">
+        //                           <form class="quizQuestionsFormUnfolded">
+        //                               <h1 class="quizQuestionsFormTitle">Pergunta ${i+1}</h1>
+        //                               <ion-icon name="create-outline"></ion-icon>
+        //                           </form>
+        //                      </div>`
+    }
+
+    element.innerHTML += `<button class="quizzInfoButton" onclick="validateInput(this)">Prosseguir para criar níveis</button>`
+}
+
+const questionsStructure = function (i){
+    const questions = 
+    `<div class="quizzQuestionContainer">
+        <div class="quizQuestionsFormUnfolded">
+            <h1 class="quizQuestionsFormTitle">Pergunta ${i+1}</h1>
+            <div class="hide">
+                <form class="quizQuestionsForm">
+                    <input type="text" placeholder="   Texto da pergunta" />
+                    <input type="text" placeholder="   Cor de fundo da pergunta" />
+                </form>
+                <h1 class="quizQuestionsFormTitle">Resposta correta</h1>
+                <form class="quizQuestionsForm">
+                    <input type="text" placeholder="   Resposta correta" />
+                    <input type="url" placeholder="   URL da imagem" />
+                </form>
+                <h1 class="quizQuestionsFormTitle">Respostas incorretas</h1>
+                <form class="quizQuestionsForm">
+                    <div class="quizQuestionsFormIncorrect">
+                        <input type="text" placeholder="   Resposta incorreta 1" />
+                        <input type="url" placeholder="   URL da imagem 1" />
+                    </div>
+                    <div class="quizQuestionsFormIncorrect">
+                        <input type="text" placeholder="   Resposta incorreta 2" />
+                        <input type="url" placeholder="   URL da imagem 2" />
+                    </div>
+                    <div class="quizQuestionsFormIncorrect">
+                        <input type="text" placeholder="   Resposta incorreta 3" />
+                        <input type="url" placeholder="   URL da imagem 3" />
+                    </div>
+                </form>
+            </div>
+            <ion-icon onclick="editQuestion(this)" name="create-outline"></ion-icon>
+        </div>
+    </div>`
+
+    return questions;
+
+}
+
+function editQuestion(element){
+    const questionContainers = element.closest(".quizzQuestions").querySelectorAll(".quizzQuestionContainer");
+     for(let i=0; i < questionContainers.length; i++){
+         if(questionContainers[i].childNodes[1].childNodes[3].classList.contains("hide") === false){
+             questionContainers[i].childNodes[1].classList.add("quizQuestionsFormUnfolded")
+             questionContainers[i].childNodes[1].childNodes[3].classList.add("hide")
+             questionContainers[i].childNodes[1].childNodes[5].classList.remove("hide")
+         }
+    }
+    const a = element.previousElementSibling;
+    a.classList.remove("hide");
+    a.parentNode.classList.remove("quizQuestionsFormUnfolded");
+    element.classList.add("hide");
+}
+
+function urlValidation(str){
+    return /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/.test(str);
+}
+
+function hexValidation(str){
+    return /^#((0x){0,1}|#{0,1})([0-9A-F]{8}|[0-9A-F]{6})$/.test(str);
 }
 
 // function postQuizz {
