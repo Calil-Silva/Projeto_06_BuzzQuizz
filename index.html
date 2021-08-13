@@ -22,11 +22,18 @@
         <h1 class="title">BuzzQuizz</h1>
     </nav>
 
+    <section class="quizzSelected hide">
+        <header>
+            <h1 class="quizzSelectedTitle"></h1>
+            <div class="questions"></div>        
+        </header>
+    </section>
+
     <main class="quizzesList">
         <section>
             <div class="myQuizz">
                 <h2 class="message">Você não criou nenhum quizz ainda :(</h2>
-                <button class="createQuizz" onclick="hideContent(this);">Criar Quizz</button>
+                <button class="createQuizz" onclick="loadInterface(this);">Criar Quizz</button>
             </div>
         </section>
 
@@ -58,53 +65,13 @@
                     <input type="number" min="0" step="1" placeholder="   Quantidade de níveis do quizz" />
                 </form>
             </div>
-            <button class="quizzInfoButton">Prosseguir para criar perguntas</button>
+            <button class="quizzInfoButton" onclick="validateInput(this)">Prosseguir para criar perguntas</button>
         </section>
     </main>
 
     <main class="quizzCreationQuestions hide">
         <section class="quizzQuestions">
             <h1 class="quizzQuestionsTitle">Crie suas perguntas</h1>
-            <div class="quizzQuestionContainer">
-                <h1 class="quizQuestionsFormTitle">Pergunta 1</h1>
-                <form class="quizQuestionsForm">
-                    <input type="text" placeholder="   Texto da pergunta" />
-                    <input type="text" placeholder="   Cor de fundo da pergunta" />
-                </form>
-                <h1 class="quizQuestionsFormTitle">Resposta correta</h1>
-                <form class="quizQuestionsForm">
-                    <input type="text" placeholder="   Resposta correta" />
-                    <input type="url" placeholder="   URL da imagem" />
-                </form>
-                <h1 class="quizQuestionsFormTitle">Respostas incorretas</h1>
-                <form class="quizQuestionsForm">
-                    <div class="quizQuestionsFormIncorrect">
-                        <input type="text" placeholder="   Resposta incorreta 1" />
-                        <input type="url" placeholder="   URL da imagem 1" />
-                    </div>
-                    <div class="quizQuestionsFormIncorrect">
-                        <input type="text" placeholder="   Resposta incorreta 2" />
-                        <input type="url" placeholder="   URL da imagem 2" />
-                    </div>
-                    <div class="quizQuestionsFormIncorrect">
-                        <input type="text" placeholder="   Resposta incorreta 3" />
-                        <input type="url" placeholder="   URL da imagem 3" />
-                    </div>
-                </form>
-            </div>
-            <div class="quizzQuestionContainer">
-                <form class="quizQuestionsFormUnfolded">
-                    <h1 class="quizQuestionsFormTitle">Pergunta 2</h1>
-                    <ion-icon name="create-outline"></ion-icon>
-                </form>
-            </div>
-            <div class="quizzQuestionContainer">
-                <form class="quizQuestionsFormUnfolded">
-                    <h1 class="quizQuestionsFormTitle">Pergunta 3</h1>
-                    <ion-icon name="create-outline"></ion-icon>
-                </form>
-            </div>
-            <button class="quizzInfoButton">Prosseguir para criar níveis</button>
         </section>
     </main>
 
@@ -132,7 +99,7 @@
                     <ion-icon name="create-outline"></ion-icon>
                 </form>
             </div>
-            <button class="quizzInfoButton">Finalizar Quizz</button>
+            <button class="quizzInfoButton" onclick="loadInterface(this)">Finalizar Quizz</button>
         </section>
     </main>
 
