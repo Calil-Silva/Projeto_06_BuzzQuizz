@@ -51,6 +51,7 @@ function startQuizz(response) {
 
 function hideContent(element) {
     element.closest(".quizzesList").classList.add("hide");
+    quizzCreation.classList.remove("hide");
 }
 
 function loadQuestions(response) {
