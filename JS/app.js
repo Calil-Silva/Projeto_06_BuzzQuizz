@@ -170,7 +170,6 @@ function validateInput(element){
                 break;
             }
         case "quizQuestionsForm":
-            
             form = element.closest("section").querySelectorAll(".quizQuestionsForm");
             console.log(form[2][0])   
             
@@ -185,12 +184,6 @@ function fillQuestions(element){
     
     for(let i = 0; i < quiz.questions.length; i++){
         element.innerHTML += questionsStructure(i);
-        //`<div class="quizzQuestionContainer">
-        //                           <form class="quizQuestionsFormUnfolded">
-        //                               <h1 class="quizQuestionsFormTitle">Pergunta ${i+1}</h1>
-        //                               <ion-icon name="create-outline"></ion-icon>
-        //                           </form>
-        //                      </div>`
     }
 
     element.innerHTML += `<button class="quizzInfoButton" onclick="validateInput(this)">Prosseguir para criar níveis</button>`
@@ -236,22 +229,30 @@ const questionsStructure = function (i){
 }
 
 function editQuestion(element){
+    const questionsFoms = element.previousElementSibling;
     const questionContainers = element.closest(".quizzQuestions").querySelectorAll(".quizzQuestionContainer");
+
      for(let i=0; i < questionContainers.length; i++){
          if(questionContainers[i].childNodes[1].childNodes[3].classList.contains("hide") === false){
-             questionContainers[i].childNodes[1].classList.add("quizQuestionsFormUnfolded")
-             questionContainers[i].childNodes[1].childNodes[3].classList.add("hide")
-             questionContainers[i].childNodes[1].childNodes[5].classList.remove("hide")
+             questionContainers[i].childNodes[1].classList.add("quizQuestionsFormUnfolded");
+             questionContainers[i].childNodes[1].childNodes[3].classList.add("hide");
+             questionContainers[i].childNodes[1].childNodes[5].classList.remove("hide");
          }
     }
-    const a = element.previousElementSibling;
-    a.classList.remove("hide");
-    a.parentNode.classList.remove("quizQuestionsFormUnfolded");
+    
+    questionsFoms.classList.remove("hide");
+    questionsFoms.parentNode.classList.remove("quizQuestionsFormUnfolded");
     element.classList.add("hide");
 }
 
 function urlValidation(str){
-    return /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/.test(str);
+    try{
+        new URL(str);
+    }
+    catch(error){
+        return false;
+    }
+    return true;
 }
 
 function hexValidation(str){
