@@ -307,7 +307,7 @@ ion-icon{
     background-color: #fff;
     margin: 0 auto 42px;
     padding: 34px;
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: space-between;
 }
@@ -346,4 +346,30 @@ ion-icon{
     width: 300px;
     text-align: justify;
     height: 100%;
+}
+
+.restartQuizz {
+    height: 52px;
+    width: 260px;
+    background: #EC362D;
+    border-radius: 15px;
+    border: none;
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-size: 21px;
+    font-weight: 400px;
+    margin: 15px auto;
+    display: none;
+
+}
+
+.homePage {
+    font-family: 'Roboto', sans-serif;
+    font-size: 21px;
+    font-weight: 400px;
+    border: none;
+    color: #818181;
+    background-color: #E5E5E5;
+    margin: 15px auto 42px;
+    display: none;
 }

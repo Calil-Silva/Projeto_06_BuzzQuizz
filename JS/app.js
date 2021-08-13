@@ -4,6 +4,7 @@ let noRepetitionArray = [];
 let rights = 0;
 let score = 0;
 let counterOne = 0;
+let quizzScoreCard;
 
 const quiz = {
     title: "",
@@ -181,9 +182,13 @@ function scrollNextQuestion(index) {
 
 function quizzResult(response) {
     let quizzScoreCard = document.querySelector(".result");
+    let restartButton = document.querySelector(".restartQuizz");
+    let homePageButton = document.querySelector(".homePage")
     let counterTwo = 0;
 
     quizzScoreCard.style.display = "flex";
+    restartButton.style.display = "block";
+    homePageButton.style.display = "block";
 
     for(let z = 0; z < response.data[quizz].levels.length; z++) {
         
@@ -201,6 +206,26 @@ function quizzResult(response) {
             </div>
     `;
     };
+}
+
+function restartQuizz() {
+    let quizzScoreCard = document.querySelector(".result");
+    let question = document.querySelector(".questions");
+
+    rights = 0;
+    counterOne = 0;
+
+    
+    quizzScoreCard.style.display = "none";
+    quizzScoreCard.innerHTML = "";
+
+    question.innerHTML = "";
+
+    chooseQuizz();
+}
+
+function backHomePage() {
+    window.location.reload();
 }
 
 function loadInterface(element){
