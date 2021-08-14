@@ -240,7 +240,7 @@ function backHomePage() {
     window.location.reload();
 }
 
-function loadInterface(element){
+function loadInterface(element, type){
     const visibleStructure = element.closest("main");
     const invisibleStructure = visibleStructure.nextElementSibling;
     hideContent(visibleStructure);
@@ -262,6 +262,7 @@ function validateInput(element){
                 quiz.questions.fill(questions)
                 quiz.levels.length = form[3].value;
                 loadInterface(element, form.classList.item(0));
+                clearInput(form);
                 break;
             }
         case "quizQuestionsForm":
@@ -287,6 +288,12 @@ function validateInput(element){
     }
     console.log(quiz)
             
+}
+
+function clearInput(form){
+    for(let i = 0; i < form.length; i++){
+        form[i].value = "";
+    }
 }
 
 function validateQuestionText(input, i){
