@@ -5,6 +5,7 @@ let rights = 0;
 let score = 0;
 let counterOne = 0;
 let quizzScoreCard;
+let alertCounter = 0;
 
 const quiz = {
     title: "",
@@ -13,6 +14,17 @@ const quiz = {
     levels: []
 }
 
+const questions = {
+    title: "",
+    color: "",
+    answers: []
+}
+
+const answers = {
+    text: "",
+    image: "",
+    isCorrectAnswer: ""
+}
 
 function comparador() { 
 	return Math.random() - 0.5; 
@@ -239,42 +251,121 @@ function loadInterface(element){
     const invisibleStructure = visibleStructure.nextElementSibling;
     hideContent(visibleStructure);
     invisibleStructure.classList.remove("hide");
-    fillQuestions(invisibleStructure.querySelector("section"));
+    fillElements(invisibleStructure.querySelector("section"), type);
 }
 
 function validateInput(element){
     let form = element.closest("section").querySelector("form");
-    switch(form.className){
+    switch(form.classList.item(0)){
         case "quizInfoForm":
             if(form[0].value.length < 20 || form[0].value.length > 65 || !urlValidation(form[1].value) || form[2].value < 3 || form[3].value < 2){
                 alert("Por favor, preencha os dados corretamente.");
                 break;
             } else{
-                quiz.name = form[0].value;
+                quiz.title = form[0].value;
                 quiz.image = form[1].value;
                 quiz.questions.length = form[2].value;
+                quiz.questions.fill(questions)
                 quiz.levels.length = form[3].value;
-                loadInterface(element);
+                loadInterface(element, form.classList.item(0));
                 break;
             }
         case "quizQuestionsForm":
+            let k = 0;
+            let j = 0;
             form = element.closest("section").querySelectorAll(".quizQuestionsForm");
-            console.log(form[2][0])   
-            
+            for(let i = 0; i < form.length; i++){
+                if(form[i].classList.contains("questionText")){
+                    validateQuestionText(form[i][0].value, k);
+                    validateBackgroundColor(form[i][1].value, k);
+                    k++;
+                } else if(form[i].classList.contains("answerCorrect")){
+                    validateCorrectAnswerText(form[i][0].value, j);
+                    validateCorrectAnswerImage(form[i][0].value, j);
+                    j++;
+                } else if(form[i].classList.contains("incorrectAnswer")){
+                }
+            }
+            loadInterface(element, "quizQuestionsForm");
+            break;
+        case "quizLevelsForm":
+            loadInterface(element, "quizLevelsForm");
     }
-
+    console.log(quiz)
+            
 }
 
-function fillQuestions(element){
+function validateQuestionText(input, i){
+    if(input.length < 20){
+        alertInputValidation();
+    }else{
+        quiz.questions[i].title = input;                                                                            
+    }
+}
+
+function validateCorrectAnswerText(input, i){
+    if(input.length <= 0){
+        alertInputValidation();
+    }else{
+        quiz.questions[i].answers.push(answers);
+        quiz.questions[i].answers[0].text = input;
+        quiz.questions[i].answers[0].isCorrectAnswer = true;                                                              
+    }
+}
+
+function validateCorrectAnswerImage(input, i){
+    if(!urlValidation(input)){
+        alertInputValidation();
+    }else{
+        quiz.questions[i].answers[0].image = input;                                                           
+    }
+}
+
+function alertInputValidation(){
+    if(alertCounter === 0){
+        alert("Por favor, preencha os dados corretamente.");
+        alertCounter++;
+    } else{
+        return;
+    }
+}
+
+function fillElements(element, type){
     if(quiz.questions.length === 0){
         return;
     }
-    
-    for(let i = 0; i < quiz.questions.length; i++){
-        element.innerHTML += questionsStructure(i);
-    }
 
-    element.innerHTML += `<button class="quizzInfoButton" onclick="validateInput(this)">Prosseguir para criar níveis</button>`
+    if(type === "quizInfoForm"){
+        for(let i = 0; i < quiz.questions.length; i++){
+            element.innerHTML += questionsStructure(i);
+        }
+        element.innerHTML += `<button class="quizzInfoButton" onclick="validateInput(this)">Prosseguir para criar níveis</button>`
+    }else if(type === "quizQuestionsForm"){
+        for(let i = 0; i < quiz.levels.length; i++){
+            element.innerHTML += levelStructrue(i);
+        }
+        element.innerHTML += `<button class="quizzInfoButton" onclick="validateInput(this)">Finalizar Quizz</button>`
+    }
+}
+
+const levelStructrue = function (i){
+    const levels = 
+    `<div class="quizzQuestionContainer">
+        <div class="quizQuestionsFormUnfolded">
+            <h1 class="quizLevelsFormTitle">Nível ${i+1}</h1>
+            <div class="hide">
+                <form class="quizLevelsForm">
+                    <input type="text" placeholder="   Título do nível" />
+                    <input type="text" placeholder="   % de acerto mínima" />
+                    <input type="url" placeholder="   URL da imagem do nível" />
+                    <input type="text" placeholder="   Descrição do nível" />
+                </form>
+            </div>
+            <ion-icon onclick="editQuestion(this)" name="create-outline"></ion-icon>
+        </div>
+    </div>`
+
+    return levels;
 }
 
 const questionsStructure = function (i){
@@ -283,17 +374,17 @@ const questionsStructure = function (i){
         <div class="quizQuestionsFormUnfolded">
             <h1 class="quizQuestionsFormTitle">Pergunta ${i+1}</h1>
             <div class="hide">
-                <form class="quizQuestionsForm">
+                <form class="quizQuestionsForm questionText">
                     <input type="text" placeholder="   Texto da pergunta" />
                     <input type="text" placeholder="   Cor de fundo da pergunta" />
                 </form>
                 <h1 class="quizQuestionsFormTitle">Resposta correta</h1>
-                <form class="quizQuestionsForm">
+                <form class="quizQuestionsForm answerCorrect">
                     <input type="text" placeholder="   Resposta correta" />
                     <input type="url" placeholder="   URL da imagem" />
                 </form>
                 <h1 class="quizQuestionsFormTitle">Respostas incorretas</h1>
-                <form class="quizQuestionsForm">
+                <form class="quizQuestionsForm incorrectAnswer">
                     <div class="quizQuestionsFormIncorrect">
                         <input type="text" placeholder="   Resposta incorreta 1" />
                         <input type="url" placeholder="   URL da imagem 1" />
@@ -343,8 +434,12 @@ function urlValidation(str){
     return true;
 }
 
-function hexValidation(str){
-    return /^#((0x){0,1}|#{0,1})([0-9A-F]{8}|[0-9A-F]{6})$/.test(str);
+function validateBackgroundColor(input, i){
+    if(!/^#((0x){0,1}|#{0,1})([0-9A-F]{8}|[0-9A-F]{6})$/.test(input)){
+        alertInputValidation();
+    }else{
+        quiz.questions[i].color = input;
+    }
 }
 
 // function postQuizz {
