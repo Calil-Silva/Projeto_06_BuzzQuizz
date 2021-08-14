@@ -4,7 +4,11 @@ let noRepetitionArray = [];
 let rights = 0;
 let score = 0;
 let counterOne = 0;
+<<<<<<< HEAD
 let alertCounter = 0;
+=======
+let quizzScoreCard;
+>>>>>>> 1efb01e8c5196c16276dc905d6cc0f6f8aad1218
 
 const quiz = {
     title: "",
@@ -148,11 +152,12 @@ function selectAnswer(option, index) {
             break;
         } else if(trueOrFalse === "true") {
             answersList[z].classList.add("opacity");
+            answersList[z].onclick = null;
             option.classList.remove("opacity");
             textAnswer.style.color ="green";
-            
         } else {
             answersList[z].classList.add("opacity");
+            answersList[z].onclick = null;
             option.classList.remove("opacity");
             textAnswer.style.color ="red";
         }
@@ -171,8 +176,11 @@ function selectAnswer(option, index) {
     scrollNextQuestion(index);
 
     if(counterOne === answers.length) {
-        loadScore()
+        loadScore();
     }
+
+    console.log(counterOne);
+    console.log(answers.length);
 
 }
 
@@ -189,9 +197,13 @@ function scrollNextQuestion(index) {
 
 function quizzResult(response) {
     let quizzScoreCard = document.querySelector(".result");
+    let restartButton = document.querySelector(".restartQuizz");
+    let homePageButton = document.querySelector(".homePage")
     let counterTwo = 0;
 
     quizzScoreCard.style.display = "flex";
+    restartButton.style.display = "block";
+    homePageButton.style.display = "block";
 
     for(let z = 0; z < response.data[quizz].levels.length; z++) {
         
@@ -211,7 +223,31 @@ function quizzResult(response) {
     };
 }
 
+<<<<<<< HEAD
 function loadInterface(element, type){
+=======
+function restartQuizz() {
+    let quizzScoreCard = document.querySelector(".result");
+    let question = document.querySelector(".questions");
+
+    rights = 0;
+    counterOne = 0;
+
+    
+    quizzScoreCard.style.display = "none";
+    quizzScoreCard.innerHTML = "";
+
+    question.innerHTML = "";
+
+    chooseQuizz();
+}
+
+function backHomePage() {
+    window.location.reload();
+}
+
+function loadInterface(element){
+>>>>>>> 1efb01e8c5196c16276dc905d6cc0f6f8aad1218
     const visibleStructure = element.closest("main");
     const invisibleStructure = visibleStructure.nextElementSibling;
     hideContent(visibleStructure);
