@@ -57,11 +57,11 @@ function listOtherQuizzes(response) {
             <span class="quizzTitle">${response.data[i].title}</span>
             <img class="quizzImage" src="${response.data[i].image}">
             <div class="deleteOrEdit">
-                <div class="edit">
+                <div class="edit" id="e${i}">
                 <img src="./files/Group 51.svg">
                 </div>
-                <div class="delete">
-                <img src="./files/Group.svg">
+                <div class="delete" id="d${i}" onclick="deleteQuizz(this, ${i});">
+                <img src="./files/Group.svg" id="delete${i}">
                 </div>
             </div>
         </li>`
@@ -262,7 +262,7 @@ function backHomePage() {
     window.location.reload();
 }
 
-function loadInterface(element) {
+function loadInterface(element, type) {
     const visibleStructure = element.closest("main");
     const invisibleStructure = visibleStructure.nextElementSibling;
     hideContent(visibleStructure);
@@ -274,7 +274,7 @@ function validateInput(element) {
     let form = element.closest("section").querySelector("form");
     switch (form.classList.item(0)) {
         case "quizInfoForm":
-            if (form[0].value.length < 20 || form[0].value.length > 65 || !urlValidation(form[1].value) || form[2].value < 3 || form[3].value < 2) {
+            if (form[0].value.length < 20 || form[0].value.length > 65 || urlValidation(form[1].value) || form[2].value < 3 || form[3].value < 2) {
                 alert("Por favor, preencha os dados corretamente.");
                 break;
             } else {
@@ -310,6 +310,12 @@ function validateInput(element) {
     }
     console.log(quiz)
 
+}
+
+function clearInput(form){
+    for(let i = 0; i < form.length; i++){
+        form[i].value = "";
+    }
 }
 
 function validateQuestionText(input, i) {
