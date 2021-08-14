@@ -4,11 +4,8 @@ let noRepetitionArray = [];
 let rights = 0;
 let score = 0;
 let counterOne = 0;
-<<<<<<< HEAD
-let alertCounter = 0;
-=======
 let quizzScoreCard;
->>>>>>> 1efb01e8c5196c16276dc905d6cc0f6f8aad1218
+let alertCounter = 0;
 
 const quiz = {
     title: "",
@@ -223,9 +220,6 @@ function quizzResult(response) {
     };
 }
 
-<<<<<<< HEAD
-function loadInterface(element, type){
-=======
 function restartQuizz() {
     let quizzScoreCard = document.querySelector(".result");
     let question = document.querySelector(".questions");
@@ -247,7 +241,6 @@ function backHomePage() {
 }
 
 function loadInterface(element){
->>>>>>> 1efb01e8c5196c16276dc905d6cc0f6f8aad1218
     const visibleStructure = element.closest("main");
     const invisibleStructure = visibleStructure.nextElementSibling;
     hideContent(visibleStructure);
