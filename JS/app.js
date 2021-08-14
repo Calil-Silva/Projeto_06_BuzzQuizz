@@ -284,6 +284,7 @@ function validateInput(element) {
                 quiz.questions.fill(questions)
                 quiz.levels.length = form[3].value;
                 loadInterface(element, form.classList.item(0));
+                clearInput(form);
                 break;
             }
         case "quizQuestionsForm":
