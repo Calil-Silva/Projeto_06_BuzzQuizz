@@ -287,7 +287,7 @@ ion-icon {
 
 .result {
     width: 759px;
-    height: 430px;
+    height: 100%;
     background-color: #fff;
     margin: 0 auto 42px;
     padding: 34px;
@@ -327,9 +327,13 @@ ion-icon {
 }
 
 .result p {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 19px;
     width: 100%;
     text-align: justify;
     height: 100%;
+    color: #484848;
 }
 
 .restartQuizz {
@@ -372,12 +376,57 @@ ion-icon {
     }
     .nthQuestion {
         width: 100vw;
+        padding: 20px;
     }
     .answers img {
         width: 100%;
-
+        min-height: 113px;
+    }
+    .answers li {
+        width: calc((100% - 20px) / 2);
     }
     .result {
         width: 100vw;
+        padding: 20px;
+    }
+    .resultTitle {
+        font-size: 19px;
+        margin-bottom: 9px;
+    }
+    .result span {
+        margin-bottom: 20px;
+    }
+    .result div:nth-child(2) {
+        flex-direction: column;
+    }
+
+    .result p {
+        font-size: 17px;
+    }
+
+    .quizzSelectedTitle {
+        height: 142px;
+        width: 100vw;
+    }
+    
+    .quizzSelectedTitle img {
+        height: 100%;
+    }
+    
+    .quizzSelectedTitle .selectedTitle {
+        font-size: 19px;
+    }
+
+    .quizzSelectedTitle .quizzSelectedBackG {
+        height: 142px;
+    }
+
+    .qTitle {
+        height: 89px;
+        font-size: 19px;
+    }
+
+    .answers li span {
+        font-size: 13px;
     }
 }
