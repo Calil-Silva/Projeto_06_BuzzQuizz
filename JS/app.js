@@ -109,7 +109,7 @@ function loadAnswers(response, i) {
         answer.innerHTML +=
             `
             <li onclick="selectAnswer(this, ${i});">
-                <div><img src="${response.data[quizz].questions[i].answers[noRepetitionArray[j]].image}"></div>
+                <div class="container"><img src="${response.data[quizz].questions[i].answers[noRepetitionArray[j]].image}"></div>
                 <span class="hide" onclick="isCorrectAnswer(this)">${response.data[quizz].questions[i].answers[noRepetitionArray[j]].isCorrectAnswer}</span>
                 <span>${response.data[quizz].questions[i].answers[noRepetitionArray[j]].text}</span>
             </li>
@@ -211,6 +211,8 @@ function quizzResult(response) {
 function restartQuizz() {
     let quizzScoreCard = document.querySelector(".result");
     let question = document.querySelector(".questions");
+    let restartButton = document.querySelector(".restartQuizz");
+    let homePageButton = document.querySelector(".homePage");
 
     rights = 0;
     counterOne = 0;
@@ -222,6 +224,10 @@ function restartQuizz() {
     question.innerHTML = "";
 
     chooseQuizz();
+
+    restartButton.style.display = "none";
+    homePageButton.style.display = "none";
+
 }
 
 function backHomePage() {
