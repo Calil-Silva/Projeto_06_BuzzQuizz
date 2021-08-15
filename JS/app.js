@@ -16,25 +16,8 @@ const quiz = {
     levels: []
 }
 
-<<<<<<< HEAD
-function comparador() { 
-	return Math.random() - 0.5; 
-=======
-const questions = {
-    title: "",
-    color: "",
-    answers: []
-}
-
-const answers = {
-    text: "",
-    image: "",
-    isCorrectAnswer: ""
-}
-
 function comparador() {
     return Math.random() - 0.5;
->>>>>>> 0218df3ee54b6eae53a4d5bd8ddeda6274ed9306
 }
 
 function getQuizzes() {
@@ -298,7 +281,6 @@ function validateInput(element) {
             let j = 0;
             let l = 0;
             form = element.closest("section").querySelectorAll(".quizQuestionsForm");
-<<<<<<< HEAD
             for(let i = 0; i < form.length; i++){
                 const questions = {
                     title: "",
@@ -323,18 +305,6 @@ function validateInput(element) {
                 } else if(form[i].classList.contains("incorrectAnswer")){          
                     alertCounter += validateIncorrectAnswer(form[i], l);
                     l++;
-=======
-            for (let i = 0; i < form.length; i++) {
-                if (form[i].classList.contains("questionText")) {
-                    validateQuestionText(form[i][0].value, k);
-                    validateBackgroundColor(form[i][1].value, k);
-                    k++;
-                } else if (form[i].classList.contains("answerCorrect")) {
-                    validateCorrectAnswerText(form[i][0].value, j);
-                    validateCorrectAnswerImage(form[i][0].value, j);
-                    j++;
-                } else if (form[i].classList.contains("incorrectAnswer")) {
->>>>>>> 0218df3ee54b6eae53a4d5bd8ddeda6274ed9306
                 }
             }
             if(alertCounter === 0){
@@ -353,7 +323,6 @@ function validateInput(element) {
             postQuizz();
     }
     console.log(quiz)
-<<<<<<< HEAD
 }
 
 function validateLevel(form){
@@ -394,8 +363,6 @@ function createAnswer(questionIndex, text, image, answer){
     }
 
     quiz.questions[questionIndex].answers.push(answers);
-=======
->>>>>>> 0218df3ee54b6eae53a4d5bd8ddeda6274ed9306
 
 }
 
@@ -405,7 +372,6 @@ function clearInput(form){
     }
 }
 
-<<<<<<< HEAD
 function validateIncorrectAnswerText(input, i, m){
     if(input.length === 0){
         return 1;
@@ -450,48 +416,17 @@ function validateInorrectAnswerImage(input, i, m){
     }else{
         quiz.questions[i].answers[m].image = input;
         return 0;                                                      
-=======
-function validateQuestionText(input, i) {
-    if (input.length < 20) {
-        alertInputValidation();
-    } else {
-        quiz.questions[i].title = input;
-    }
-}
-
-function validateCorrectAnswerText(input, i) {
-    if (input.length <= 0) {
-        alertInputValidation();
-    } else {
-        quiz.questions[i].answers.push(answers);
-        quiz.questions[i].answers[0].text = input;
-        quiz.questions[i].answers[0].isCorrectAnswer = true;
-    }
-}
-
-function validateCorrectAnswerImage(input, i) {
-    if (!urlValidation(input)) {
-        alertInputValidation();
-    } else {
-        quiz.questions[i].answers[0].image = input;
->>>>>>> 0218df3ee54b6eae53a4d5bd8ddeda6274ed9306
     }
 }
 
 function alertInputValidation() {
     if (alertCounter === 0) {
         alert("Por favor, preencha os dados corretamente.");
-<<<<<<< HEAD
     } else{
-=======
-        alertCounter++;
-    } else {
->>>>>>> 0218df3ee54b6eae53a4d5bd8ddeda6274ed9306
         return;
     }
 }
 
-<<<<<<< HEAD
 function fillElements(element, type){
     if(type === "quizInfoForm"){
         for(let i = 0; i < numQuestions; i++){
@@ -500,20 +435,6 @@ function fillElements(element, type){
         element.innerHTML += `<button class="quizzInfoButton" onclick="validateInput(this)">Prosseguir para criar níveis</button>`
     }else if(type === "quizQuestionsForm"){
         for(let i = 0; i < numLevels; i++){
-=======
-function fillElements(element, type) {
-    if (quiz.questions.length === 0) {
-        return;
-    }
-
-    if (type === "quizInfoForm") {
-        for (let i = 0; i < quiz.questions.length; i++) {
-            element.innerHTML += questionsStructure(i);
-        }
-        element.innerHTML += `<button class="quizzInfoButton" onclick="validateInput(this)">Prosseguir para criar níveis</button>`
-    } else if (type === "quizQuestionsForm") {
-        for (let i = 0; i < quiz.levels.length; i++) {
->>>>>>> 0218df3ee54b6eae53a4d5bd8ddeda6274ed9306
             element.innerHTML += levelStructrue(i);
         }
         element.innerHTML += `<button class="quizzInfoButton" onclick="validateInput(this)">Finalizar Quizz</button>`
@@ -606,17 +527,10 @@ function urlValidation(str) {
     return true;
 }
 
-<<<<<<< HEAD
 function validateBackgroundColor(input, i){
     if(!/^#((0x){0,1}|#{0,1})([0-9A-F]{8}|[0-9A-F]{6})$/.test(input)){
         return 1;
     }else{
-=======
-function validateBackgroundColor(input, i) {
-    if (!/^#((0x){0,1}|#{0,1})([0-9A-F]{8}|[0-9A-F]{6})$/.test(input)) {
-        alertInputValidation();
-    } else {
->>>>>>> 0218df3ee54b6eae53a4d5bd8ddeda6274ed9306
         quiz.questions[i].color = input;
         return 0;
     }
