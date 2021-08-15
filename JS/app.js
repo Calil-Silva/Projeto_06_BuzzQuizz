@@ -264,7 +264,7 @@ function validateInput(element) {
     let form = element.closest("section").querySelector("form");
     switch (form.classList.item(0)) {
         case "quizInfoForm":
-            if (form[0].value.length < 20 || form[0].value.length > 65 || urlValidation(form[1].value) || form[2].value < 3 || form[3].value < 2) {
+            if (form[0].value.length < 20 || form[0].value.length > 65 || !urlValidation(form[1].value) || form[2].value < 3 || form[3].value < 2) {
                 alert("Por favor, preencha os dados corretamente.");
                 break;
             } else {
@@ -537,6 +537,11 @@ function validateBackgroundColor(input, i){
 }
 
 function postQuizz(){
-    let promisse = axios.post(`${URL_API}`, quiz);
+    let promisse = axios.post(`${URL_API}`, quiz)
+        .then(success)
+        .catch();
 }
 
+function success(response){
+    console.log(response)
+}
