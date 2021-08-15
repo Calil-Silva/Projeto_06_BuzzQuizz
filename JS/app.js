@@ -6,24 +6,14 @@ let score = 0;
 let counterOne = 0;
 let quizzScoreCard;
 let alertCounter = 0;
+let numQuestions;
+let numLevels;
 
 const quiz = {
     title: "",
     image: "",
     questions: [],
     levels: []
-}
-
-const questions = {
-    title: "",
-    color: "",
-    answers: []
-}
-
-const answers = {
-    text: "",
-    image: "",
-    isCorrectAnswer: ""
 }
 
 function comparador() { 
@@ -264,9 +254,8 @@ function validateInput(element){
             } else{
                 quiz.title = form[0].value;
                 quiz.image = form[1].value;
-                quiz.questions.length = form[2].value;
-                quiz.questions.fill(questions)
-                quiz.levels.length = form[3].value;
+                numQuestions = form[2].value;
+                numLevels = form[3].value;
                 loadInterface(element, form.classList.item(0));
                 clearInput(form);
                 break;
@@ -274,26 +263,91 @@ function validateInput(element){
         case "quizQuestionsForm":
             let k = 0;
             let j = 0;
+            let l = 0;
             form = element.closest("section").querySelectorAll(".quizQuestionsForm");
             for(let i = 0; i < form.length; i++){
+                const questions = {
+                    title: "",
+                    color: "",
+                    answers: []
+                }
+                const answers = {
+                    text: "",
+                    image: "",
+                    isCorrectAnswer: ""
+                }
                 if(form[i].classList.contains("questionText")){
-                    validateQuestionText(form[i][0].value, k);
-                    validateBackgroundColor(form[i][1].value, k);
+                    quiz.questions.push(questions);
+                    alertCounter += validateQuestionText(form[i][0].value, k);
+                    alertCounter += validateBackgroundColor(form[i][1].value, k);
                     k++;
                 } else if(form[i].classList.contains("answerCorrect")){
-                    validateCorrectAnswerText(form[i][0].value, j);
-                    validateCorrectAnswerImage(form[i][0].value, j);
+                    quiz.questions[j].answers.push(answers);
+                    alertCounter += validateCorrectAnswerText(form[i][0].value, j);
+                    alertCounter += validateCorrectAnswerImage(form[i][1].value, j);
                     j++;
-                } else if(form[i].classList.contains("incorrectAnswer")){
+                } else if(form[i].classList.contains("incorrectAnswer")){          
+                    alertCounter += validateIncorrectAnswer(form[i], l);
+                    l++;
                 }
             }
-            loadInterface(element, "quizQuestionsForm");
+            if(alertCounter === 0){
+                loadInterface(element, "quizQuestionsForm");
+                alertCounter = 0;
+            }else{
+                console.log(alertCounter)
+                alert("Por favor, preencha os dados corretamente.");
+                alertCounter = 0;
+            }
             break;
         case "quizLevelsForm":
+            form = element.closest("section").querySelectorAll(".quizLevelsForm");
+            alertCounter += form.forEach(validateLevel);
             loadInterface(element, "quizLevelsForm");
+            postQuizz();
     }
     console.log(quiz)
-            
+}
+
+function validateLevel(form){
+    if(form[0].value < 10 || form[1].value < 0 || form[1].value > 100 || !urlValidation(form[2].value) || form[3].value < 30){
+        return 1;
+    }else{
+        createLevel(form[0].value, form[2].value, form[3].value, form[1].value);
+        return 0;
+    }
+    
+}
+
+function createLevel(title, image, text, minValue){
+    const level = {
+        title,
+        image,
+        text,
+        minValue
+    }
+
+    quiz.levels.push(level);
+}
+
+function validateIncorrectAnswer(input, questionIndex){
+    if(input[0].value === "" || input[1].value === "" && questionIndex === 0){
+        return 1;
+    }else{
+        createAnswer(questionIndex, input[0].value, input[1].value, false);
+        return 0;
+    }
+}
+
+function createAnswer(questionIndex, text, image, answer){
+    const answers = {
+        text: text,
+        image: image,
+        isCorrectAnswer: answer
+    }
+
+    quiz.questions[questionIndex].answers.push(answers);
+
 }
 
 function clearInput(form){
@@ -302,53 +356,69 @@ function clearInput(form){
     }
 }
 
-function validateQuestionText(input, i){
-    if(input.length < 20){
-        alertInputValidation();
+function validateIncorrectAnswerText(input, i, m){
+    if(input.length === 0){
+        return 1;
     }else{
-        quiz.questions[i].title = input;                                                                            
+        quiz.questions[i].answers[m].text = input;
+        quiz.questions[i].answers[m].isCorrectAnswer = false;
+        return 0;                                                              
+    }
+}
+
+function validateQuestionText(input, k){
+    if(input.length < 20){
+        return 1;
+    }else{
+        quiz.questions[k].title = input;
+        return 0;                                              
     }
 }
 
 function validateCorrectAnswerText(input, i){
-    if(input.length <= 0){
-        alertInputValidation();
+    if(input.length === 0){
+        return 1;
     }else{
-        quiz.questions[i].answers.push(answers);
         quiz.questions[i].answers[0].text = input;
-        quiz.questions[i].answers[0].isCorrectAnswer = true;                                                              
+        quiz.questions[i].answers[0].isCorrectAnswer = true;
+        return 0;                                                              
     }
 }
 
 function validateCorrectAnswerImage(input, i){
     if(!urlValidation(input)){
-        alertInputValidation();
+        return 1;
     }else{
-        quiz.questions[i].answers[0].image = input;                                                           
+        quiz.questions[i].answers[0].image = input;
+        return 0;                                                      
+    }
+}
+
+function validateInorrectAnswerImage(input, i, m){
+    if(!urlValidation(input)){
+        return 1;
+    }else{
+        quiz.questions[i].answers[m].image = input;
+        return 0;                                                      
     }
 }
 
 function alertInputValidation(){
     if(alertCounter === 0){
         alert("Por favor, preencha os dados corretamente.");
-        alertCounter++;
     } else{
         return;
     }
 }
 
 function fillElements(element, type){
-    if(quiz.questions.length === 0){
-        return;
-    }
-
     if(type === "quizInfoForm"){
-        for(let i = 0; i < quiz.questions.length; i++){
+        for(let i = 0; i < numQuestions; i++){
             element.innerHTML += questionsStructure(i);
         }
         element.innerHTML += `<button class="quizzInfoButton" onclick="validateInput(this)">Prosseguir para criar níveis</button>`
     }else if(type === "quizQuestionsForm"){
-        for(let i = 0; i < quiz.levels.length; i++){
+        for(let i = 0; i < numLevels; i++){
             element.innerHTML += levelStructrue(i);
         }
         element.innerHTML += `<button class="quizzInfoButton" onclick="validateInput(this)">Finalizar Quizz</button>`
@@ -443,85 +513,14 @@ function urlValidation(str){
 
 function validateBackgroundColor(input, i){
     if(!/^#((0x){0,1}|#{0,1})([0-9A-F]{8}|[0-9A-F]{6})$/.test(input)){
-        alertInputValidation();
+        return 1;
     }else{
         quiz.questions[i].color = input;
+        return 0;
     }
 }
 
-// function postQuizz {
-
-    // let quizz = {
-    //     id: 1,
-    //     title: "Título do quizz",
-    //     image: "https://http.cat/411.jpg",
-    //     questions: [
-    //         {
-    //             title: "Título da pergunta 1",
-    //             color: "#123456",
-    //             answers: [
-    //                 {
-    //                     text: "Texto da resposta 1",
-    //                     image: "https://http.cat/411.jpg",
-    //                     isCorrectAnswer: true
-    //                 },
-    //                 {
-    //                     text: "Texto da resposta 2",
-    //                     image: "https://http.cat/412.jpg",
-    //                     isCorrectAnswer: false
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             title: "Título da pergunta 2",
-    //             color: "#123456",
-    //             answers: [
-    //                 {
-    //                     text: "Texto da resposta 1",
-    //                     image: "https://http.cat/411.jpg",
-    //                     isCorrectAnswer: true
-    //                 },
-    //                 {
-    //                     text: "Texto da resposta 2",
-    //                     image: "https://http.cat/412.jpg",
-    //                     isCorrectAnswer: false
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             title: "Título da pergunta 3",
-    //             color: "#123456",
-    //             answers: [
-    //                 {
-    //                     text: "Texto da resposta 1",
-    //                     image: "https://http.cat/411.jpg",
-    //                     isCorrectAnswer: true
-    //                 },
-    //                 {
-    //                     text: "Texto da resposta 2",
-    //                     image: "https://http.cat/412.jpg",
-    //                     isCorrectAnswer: false
-    //                 }
-    //             ]
-    //         }
-    //     ],
-    //     levels: [
-    //         {
-    //             title: "Título do nível 1",
-    //             image: "https://http.cat/411.jpg",
-    //             text: "Descrição do nível 1",
-    //             minValue: 0
-    //         },
-    //         {
-    //             title: "Título do nível 2",
-    //             image: "https://http.cat/412.jpg",
-    //             text: "Descrição do nível 2",
-    //             minValue: 50
-    //         }
-    //     ]
-    // }
-
-    // let promisse = axios.postQuizz(`${URL_API}`, quizz);
-
-// }
+function postQuizz(){
+    let promisse = axios.post(`${URL_API}`, quiz);
+}
 
