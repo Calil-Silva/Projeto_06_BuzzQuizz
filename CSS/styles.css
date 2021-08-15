@@ -207,6 +207,8 @@ ion-icon {
 .quizInfoForm input, .quizQuestionsForm input, .quizLevelsForm input {
     height: 46px;
     margin-bottom: 9px;
+    border-radius: 5px;
+    border: 1px solid #D1D1D1;
 }
 
 .quizInfoForm input::placeholder, .quizQuestionsForm input::placeholder, .quizLevelsForm input::placeholder {
@@ -387,6 +389,16 @@ ion-icon {
 .deleteOrEdit img {
     height: 18px;
     width: 18px;
+}
+
+.error{
+    background-color: #FFE9E9;
+}
+
+.errorText{
+    font-size: 16px;
+    color: #EC362D;
+    margin-bottom: 17px;
 }
 
 @media (min-width: 1100px) {
