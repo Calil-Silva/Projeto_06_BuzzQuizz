@@ -167,7 +167,7 @@ function loadQuestions(response) {
             </div>
             `;
         loadAnswers(response, i);
-        loadTitleColor(response, i);    //console.log(visibleStructure)
+        loadTitleColor(response, i);    
     }
 }
 
@@ -186,7 +186,7 @@ function loadMyQuestions(response) {
             </div>
             `;
         loadMyAnswers(response, i);
-        loadMyTitleColor(response, i);    //console.log(visibleStructure)
+        loadMyTitleColor(response, i);    
     }
 }
 
@@ -224,7 +224,7 @@ function loadAnswers(response, i) {
                 <span class="hide" onclick="isCorrectAnswer(this)">${response.data[quizz].questions[i].answers[noRepetitionArray[j]].isCorrectAnswer}</span>
                 <span>${response.data[quizz].questions[i].answers[noRepetitionArray[j]].text}</span>
             </li>
-            `;
+            `;//console.log(visibleStructure)
     }
 }
 
@@ -260,8 +260,6 @@ function selectAnswer(option, index, id) {
     let answers = document.querySelectorAll(".answers");
     let z = 0;
 
-    console.log(trueOrFalse)
-
     for (let z = 0; z < answersList.length; z++) {
 
         if (option.classList.contains("opacity")) {
@@ -283,7 +281,6 @@ function selectAnswer(option, index, id) {
         rights++;
 
         score = Math.round((rights / answers.length) * 100);
-        console.log(score);
 
     };
 
@@ -296,9 +293,6 @@ function selectAnswer(option, index, id) {
     } else if (counterOne === answers.length){
         loadMyScore(myQuizz);
     }
-
-    console.log(counterOne);
-    console.log(answers.length);
 
 }
 
@@ -558,7 +552,6 @@ const validateCorrectAnswer = (answer, formItem) => {
 }
 
 const validateIncorrectAnswer = (answer, formItem, index) => {
-    console.log(index)
     switch(formItem.classList[0]){
         case "incorrectAnswer":
             if(formItem.value.length === 0){
@@ -621,7 +614,6 @@ const validateQuizQuestions = (form) => {
         }
     }
     quiz.questions.push(question);
-    console.log(quiz)
 }
 
 const validateQuizLevels = (level, formItem) => {
@@ -719,7 +711,6 @@ function validateInput(element) {
                 clearInput(form);
             } break;
         case "quizQuestionsForm":
-<<<<<<< HEAD
             form = element.closest("section").querySelectorAll(".quizQuestion");
             form.forEach(validateQuizQuestions);
             if(Array.from(form).every(isFillCorrect)){
@@ -738,68 +729,6 @@ function validateInput(element) {
     }
 }
 function createLevel(){
-=======
-            let k = 0;
-            let j = 0;
-            let l = 0;
-            form = element.closest("section").querySelectorAll(".quizQuestionsForm");
-            for (let i = 0; i < form.length; i++) {
-                const questions = {
-                    title: "",
-                    color: "",
-                    answers: []
-                }
-                const answers = {
-                    text: "",
-                    image: "",
-                    isCorrectAnswer: ""
-                }
-                if (form[i].classList.contains("questionText")) {
-                    quiz.questions.push(questions);
-                    alertCounter += validateQuestionText(form[i][0].value, k);
-                    alertCounter += validateBackgroundColor(form[i][1].value, k);
-                    k++;
-                } else if (form[i].classList.contains("answerCorrect")) {
-                    quiz.questions[j].answers.push(answers);
-                    alertCounter += validateCorrectAnswerText(form[i][0].value, j);
-                    alertCounter += validateCorrectAnswerImage(form[i][1].value, j);
-                    j++;
-                } else if (form[i].classList.contains("incorrectAnswer")) {
-                    alertCounter += validateIncorrectAnswer(form[i], l);
-                    l++;
-                }
-            }
-            if (alertCounter === 0) {
-                loadInterface(element, "quizQuestionsForm");
-                alertCounter = 0;
-            } else {
-                console.log(alertCounter)
-                alert("Por favor, preencha os dados corretamente.");
-                alertCounter = 0;
-            }
-            break;
-        case "quizLevelsForm":
-            form = element.closest("section").querySelectorAll(".quizLevelsForm");
-            alertCounter += form.forEach(validateLevel);
-            loadInterface(element, "quizLevelsForm");
-            postQuizz();
-            break;
-    }
-    console.log(quiz)
-}
-
-function validateLevel(form) {
-    if (form[0].value < 10 || form[1].value < 0 || form[1].value > 100 || !urlValidation(form[2].value) || form[3].value < 30) {
-        return 1;
-    } else {
-        createLevel(form[0].value, form[2].value, form[3].value, form[1].value);
-        return 0;
-    }
-
-}
-
-function createLevel(title, image, text, minValue) {
->>>>>>> 294d8caf9284be1695db4dea579ae641e4f4ed1a
     const level = {
         title: "",
         image: "",
@@ -809,70 +738,35 @@ function createLevel(title, image, text, minValue) {
 
     return level;
 }
-<<<<<<< HEAD
 function createQuestion(){
     const question = {
         title: "",
         color: "",
         answers: []
-=======
-
-function validateIncorrectAnswer(input, questionIndex) {
-    if (input[0].value === "" || input[1].value === "" && questionIndex === 0) {
-        return 1;
-    } else {
-        createAnswer(questionIndex, input[0].value, input[1].value, false);
-        return 0;
->>>>>>> 294d8caf9284be1695db4dea579ae641e4f4ed1a
     }
 
     return question;
 }
 
-<<<<<<< HEAD
 function createCorrectAnswer(){
     const answer = {
         text: "",
         image: "",
         isCorrectAnswer: true
-=======
-function createAnswer(questionIndex, text, image, answer) {
-    const answers = {
-        text: text,
-        image: image,
-        isCorrectAnswer: answer
->>>>>>> 294d8caf9284be1695db4dea579ae641e4f4ed1a
     }
 
     return answer;
 
 }
 
-<<<<<<< HEAD
 
 function createIncorrectAnswer1(){
     const answer = {
         text: "",
         image: "",
         isCorrectAnswer: false
-=======
-function clearInput(form) {
-    for (let i = 0; i < form.length; i++) {
-        form[i].value = "";
-    }
-}
-
-function validateIncorrectAnswerText(input, i, m) {
-    if (input.length === 0) {
-        return 1;
-    } else {
-        quiz.questions[i].answers[m].text = input;
-        quiz.questions[i].answers[m].isCorrectAnswer = false;
-        return 0;
->>>>>>> 294d8caf9284be1695db4dea579ae641e4f4ed1a
     }
 
-<<<<<<< HEAD
     return answer;
 
 }
@@ -882,70 +776,26 @@ function createIncorrectAnswer2(){
         text: "",
         image: "",
         isCorrectAnswer: false
-=======
-function validateQuestionText(input, k) {
-    if (input.length < 20) {
-        return 1;
-    } else {
-        quiz.questions[k].title = input;
-        return 0;
-    }
-}
-
-function validateCorrectAnswerText(input, i) {
-    if (input.length === 0) {
-        return 1;
-    } else {
-        quiz.questions[i].answers[0].text = input;
-        quiz.questions[i].answers[0].isCorrectAnswer = true;
-        return 0;
-    }
-}
-
-function validateCorrectAnswerImage(input, i) {
-    if (!urlValidation(input)) {
-        return 1;
-    } else {
-        quiz.questions[i].answers[0].image = input;
-        return 0;
->>>>>>> 294d8caf9284be1695db4dea579ae641e4f4ed1a
     }
 
     return answer;
 
 }
 
-<<<<<<< HEAD
 function createIncorrectAnswer3(){
     const answer = {
         text: "",
         image: "",
         isCorrectAnswer: false
-=======
-function validateInorrectAnswerImage(input, i, m) {
-    if (!urlValidation(input)) {
-        return 1;
-    } else {
-        quiz.questions[i].answers[m].image = input;
-        return 0;
->>>>>>> 294d8caf9284be1695db4dea579ae641e4f4ed1a
     }
 
     return answer;
 
 }
 
-<<<<<<< HEAD
 function clearInput(form){
     for(let i = 0; i < form.length; i++){
         form[i].value = "";
-=======
-function alertInputValidation() {
-    if (alertCounter === 0) {
-        alert("Por favor, preencha os dados corretamente.");
-    } else {
-        return;
->>>>>>> 294d8caf9284be1695db4dea579ae641e4f4ed1a
     }
 }
 
@@ -990,27 +840,27 @@ const questionsStructure = function (i) {
             <h1 class="quizQuestionsFormTitle">Pergunta ${i + 1}</h1>
             <div class="quizQuestion hide">
                 <form class="quizQuestionsForm questionHeader">
-                    <input class = "questionText" type="text" placeholder="   Texto da pergunta" value="Texto da pergunta Texto da pergunta ${i+1}"/>
-                    <input class = "questionBackgroundColor" type="text" placeholder="   Cor de fundo da pergunta" value="#AAAAAA"/>
+                    <input class = "questionText" type="text" placeholder="   Texto da pergunta" />
+                    <input class = "questionBackgroundColor" type="text" placeholder="   Cor de fundo da pergunta" />
                 </form>
                 <h1 class="quizQuestionsFormTitle">Resposta correta</h1>
                 <form class="quizQuestionsForm correctAnswer">
-                    <input class = "correctAnswerText" type="text" placeholder="   Resposta correta" value="${i+1}"/>
-                    <input class = "correctAnswerImage" type="url" placeholder="   URL da imagem" value="https://developer.mozilla.org/en-US/docs/Web/API/URL/URL/">
+                    <input class = "correctAnswerText" type="text" placeholder="   Resposta correta" />
+                    <input class = "correctAnswerImage" type="url" placeholder="   URL da imagem" />
                 </form>
                 <h1 class="quizQuestionsFormTitle">Respostas incorretas</h1>
                 <form class="quizQuestionsForm incorrectAnswer">
                     <div class="quizQuestionsFormIncorrect">
-                        <input class="incorrectAnswer" type="text" placeholder="   Resposta incorreta 1" value="${i+1}" />
-                        <input class="incorrectURL" type="url" placeholder="   URL da imagem 1" value="https://developer.mozilla.org/en-US/docs/Web/API/URL/URL/"/>
+                        <input class="incorrectAnswer" type="text" placeholder="   Resposta incorreta 1" />
+                        <input class="incorrectURL" type="url" placeholder="   URL da imagem 1" />
                     </div>
                     <div class="quizQuestionsFormIncorrect">
-                        <input class="incorrectAnswer" "type="text" placeholder="   Resposta incorreta 2" value="${i+1}"/>
-                        <input class="incorrectURL" type="url" placeholder="   URL da imagem 2" value="https://developer.mozilla.org/en-US/docs/Web/API/URL/URL/"/>
+                        <input class="incorrectAnswer" "type="text" placeholder="   Resposta incorreta 2" />
+                        <input class="incorrectURL" type="url" placeholder="   URL da imagem 2" />
                     </div>
                     <div class="quizQuestionsFormIncorrect">
-                        <input class="incorrectAnswer" type="text" placeholder="   Resposta incorreta 3" value="${i+1}"/>
-                        <input class="incorrectURL" type="url" placeholder="   URL da imagem 3" value="https://developer.mozilla.org/en-US/docs/Web/API/URL/URL/"/>
+                        <input class="incorrectAnswer" type="text" placeholder="   Resposta incorreta 3" />
+                        <input class="incorrectURL" type="url" placeholder="   URL da imagem 3" />
                     </div>
                 </form>
             </div>
@@ -1049,18 +899,9 @@ function isValidURL(str) {
     return true;
 }
 
-<<<<<<< HEAD
 function isValidHex(input, i){
     if(!/^#((0x){0,1}|#{0,1})([0-9A-F]{8}|[0-9A-F]{6})$/.test(input)){
         return false;
-=======
-function validateBackgroundColor(input, i) {
-    if (!/^#((0x){0,1}|#{0,1})([0-9A-F]{8}|[0-9A-F]{6})$/.test(input)) {
-        return 1;
-    } else {
-        quiz.questions[i].color = input;
-        return 0;
->>>>>>> 294d8caf9284be1695db4dea579ae641e4f4ed1a
     }
     return true;
 }
