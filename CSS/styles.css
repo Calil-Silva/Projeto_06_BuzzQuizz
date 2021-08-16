@@ -389,6 +389,13 @@ ion-icon {
     width: 18px;
 }
 
+.myQuizzesList {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    width: 1051px;
+}
+
 @media (min-width: 1100px) {
     .otherQuizzes {
         display: flex;

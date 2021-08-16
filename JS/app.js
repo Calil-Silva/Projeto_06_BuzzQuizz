@@ -1,5 +1,6 @@
 const URL_API = "https://mock-api.bootcamp.respondeai.com.br/api/v3/buzzquizz/quizzes"
 let quizz;
+let myQuizz;
 let noRepetitionArray = [];
 let rights = 0;
 let score = 0;
@@ -42,10 +43,23 @@ function chooseQuizz() {
     promise.then(startQuizz);
 }
 
+function chooseMyQuizz(id) {
+    let promise = axios.get(`${URL_API}/${id}`);
+
+    promise.then(startMyQuizz);
+
+}
+
 function loadScore() {
     let promise = axios.get(`${URL_API}`);
 
     promise.then(quizzResult);
+}
+
+function loadMyScore(id) {
+    let promise = axios.get(`${URL_API}/${id}`);
+
+    promise.then(myQuizzResult);
 }
 
 function listOtherQuizzes(response) {
@@ -89,6 +103,17 @@ function quizzSelected(option, id) {
     chooseQuizz();
 }
 
+function myQuizzSelected(option, id) {
+    myQuizz = id
+    let main = document.querySelector(".quizzesList");
+    let quizzSelected = document.querySelector(".quizzSelected");
+
+    main.classList.add("hide");
+    quizzSelected.classList.remove("hide");
+
+    chooseMyQuizz(id);
+}
+
 function startQuizz(response) {
     let quizzTitle = document.querySelector(".quizzSelectedTitle");
 
@@ -99,6 +124,18 @@ function startQuizz(response) {
          `;
 
     loadQuestions(response)
+}
+
+function startMyQuizz(response) {
+    let quizzTitle = document.querySelector(".quizzSelectedTitle");
+
+    quizzTitle.innerHTML =
+        `<span class="quizzSelectedBackG"></span>
+         <span class="selectedTitle">${response.data.title}</span>
+         <img src="${response.data.image}">
+         `;
+
+    loadMyQuestions(response)
 }
 
 function hideContent(element) {
@@ -124,6 +161,25 @@ function loadQuestions(response) {
     }
 }
 
+function loadMyQuestions(response) {
+    let question = document.querySelector(".questions");
+
+    for (let i = 0; i < response.data.questions.length; i++) {
+        question.innerHTML +=
+            `
+            <div class="nthQuestion">
+                <div class="qTitle q${i}">
+                    <h3>${response.data.questions[i].title}</h3>
+                </div>
+                <ul class="answers a${i}"></ul>
+                <div class="nextQuestions n${i}"></div>
+            </div>
+            `;
+        loadMyAnswers(response, i);
+        loadMyTitleColor(response, i);    //console.log(visibleStructure)
+    }
+}
+
 function aleatoryArray(response, i) {
     let myArray = [];
 
@@ -133,6 +189,16 @@ function aleatoryArray(response, i) {
         noRepetitionArray.sort(comparador);
     }
 
+}
+
+function myAleatoryArray(response, i) {
+    let myArray = [];
+
+    for (let k = 0; k < response.data.questions[i].answers.length; k++) {
+        myArray.push(k);
+        noRepetitionArray = [... new Set(myArray)]
+        noRepetitionArray.sort(comparador);
+    }
 }
 
 function loadAnswers(response, i) {
@@ -150,14 +216,34 @@ function loadAnswers(response, i) {
             </li>
             `;
     }
+}
 
+function loadMyAnswers(response, i) {
+    let answer = document.querySelector(".answers.a" + i);
+
+    myAleatoryArray(response, i);
+
+    for (let j = 0; j < response.data.questions[i].answers.length; j++) {
+        answer.innerHTML +=
+            `
+            <li onclick="selectAnswer(this, ${i}, ${response.data.id});">
+                <div class="container"><img src="${response.data.questions[i].answers[noRepetitionArray[j]].image}"></div>
+                <span class="hide" onclick="isCorrectAnswer(this)">${response.data.questions[i].answers[noRepetitionArray[j]].isCorrectAnswer}</span>
+                <span>${response.data.questions[i].answers[noRepetitionArray[j]].text}</span>
+            </li>
+            `;
+    }
 }
 
 function loadTitleColor(response, i) {
     document.querySelector(".qTitle.q" + i).style.backgroundColor = response.data[quizz].questions[i].color;
 }
 
-function selectAnswer(option, index) {
+function loadMyTitleColor(response, i) {
+    document.querySelector(".qTitle.q" + i).style.backgroundColor = response.data.questions[i].color;
+}
+
+function selectAnswer(option, index, id) {
     let answersList = document.querySelectorAll(`.answers.a${index} li`);
     let trueOrFalse = option.querySelector(".hide").innerHTML;
     let textAnswer = option.querySelector("span:last-child");
@@ -195,8 +281,10 @@ function selectAnswer(option, index) {
 
     scrollNextQuestion(index);
 
-    if (counterOne === answers.length) {
+    if (counterOne === answers.length && !id) {
         loadScore();
+    } else if (counterOne === answers.length){
+        loadMyScore(myQuizz);
     }
 
     console.log(counterOne);
@@ -243,6 +331,34 @@ function quizzResult(response) {
     };
 }
 
+function myQuizzResult(response) {
+    let quizzScoreCard = document.querySelector(".result");
+    let restartButton = document.querySelector(".restartQuizz");
+    let homePageButton = document.querySelector(".homePage")
+    let counterTwo = 0;
+
+    quizzScoreCard.style.display = "flex";
+    restartButton.style.display = "block";
+    homePageButton.style.display = "block";
+
+    for (let z = 0; z < response.data.levels.length; z++) {
+
+        if (response.data.levels[z].minValue <= score) {
+            counterTwo++;
+        };
+        quizzScoreCard.innerHTML =
+            `
+    <div class="resultTitle">
+                <h3>${score}% de acerto: ${response.data.levels[counterTwo - 1].title}</h3>
+            </div>
+            <div>
+                <span><img src="${response.data.levels[counterTwo - 1].image}"></span>
+                <p>${response.data.levels[counterTwo - 1].text}</p>
+            </div>
+    `;
+    };
+}
+
 function restartQuizz() {
     let quizzScoreCard = document.querySelector(".result");
     let question = document.querySelector(".questions");
@@ -259,7 +375,11 @@ function restartQuizz() {
 
     question.innerHTML = "";
 
-    chooseQuizz();
+    if(quizz !== undefined) {
+        chooseQuizz();
+    } else {
+        chooseMyQuizz(myQuizz);
+    }
 
     restartButton.style.display = "none";
     homePageButton.style.display = "none";
@@ -585,29 +705,28 @@ function getMyQuizzes() {
 }
 
 function listMyQuizzes(response) {
-    let listMyQuizz = document.querySelector(".myQuizz");
-
-    listMyQuizz.innerHTML = "";
-
-
+    let listMyQuizz = document.querySelector(".myQuizzesList");
 
     thisArray.push(response.data)
 
-    for (let k = 0; k < arrayIdDeserialized.length; k++) {
-                    listMyQuizz.innerHTML += `
-                        <li class="quizzContent quizzImageGradient" onclick="quizzSelected(this, ${k});">
-                            <span class="quizzTitle">${thisArray[k].title}</span>
-                            <img class="quizzImage" src="${thisArray[k].image}">
-                            <div class="deleteOrEdit">
-                                <div class="edit" id="e${k}">
-                                <img src="./files/Group 51.svg">
+    if(thisArray.length === arrayIdDeserialized.length) {
+    for (let k = 0; k < thisArray.length; k++) {
+                        listMyQuizz.innerHTML += `
+                            <li class="quizzContent quizzImageGradient" onclick="myQuizzSelected(this, ${thisArray[k].id});">
+                                <span class="quizzTitle">${thisArray[k].title}</span>
+                                <img class="quizzImage" src="${thisArray[k].image}">
+                                <div class="deleteOrEdit">
+                                    <div class="edit">
+                                    <img src="./files/Group 51.svg">
+                                    </div>
+                                    <div class="delete" onclick="deleteQuizz(this, ${k});">
+                                    <img src="./files/Group.svg" id="delete${k}">
+                                    </div>
                                 </div>
-                                <div class="delete" id="d${k}" onclick="deleteQuizz(this, ${k});">
-                                <img src="./files/Group.svg" id="delete${k}">
-                                </div>
-                            </div>
-                        </li>`
-                }
+                            </li>`
+                    }
+    }
+    
 
         console.log(thisArray);
         }
