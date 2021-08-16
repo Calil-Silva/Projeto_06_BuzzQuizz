@@ -64,21 +64,18 @@ function loadMyScore(id) {
 
 function listOtherQuizzes(response) {
     let listQuizzes = document.querySelector(".otherQuizzes");
-
-    for (let i = 0; i < response.data.length; i++) {
-        array.push(response.data[i].id);
-        myArray.push(response.data[i].id);
-    }
-
-    for(let i = 0; i < arrayIdDeserialized.length; i++) {
-        let indx = array.indexOf(arrayIdDeserialized[i]);
-        array[indx] = "";
-    }
-
-    console.log(myArray)
     
-
-    for (let k = 0; k < response.data.length; k++) {
+    if(arrayIdDeserialized !== null) {
+        for (let i = 0; i < response.data.length; i++) {
+            array.push(response.data[i].id);
+            myArray.push(response.data[i].id);
+        }
+    
+        for(let i = 0; i < arrayIdDeserialized.length; i++) {
+            let indx = array.indexOf(arrayIdDeserialized[i]);
+            array[indx] = "";
+        }
+        for (let k = 0; k < response.data.length; k++) {
             if(response.data[k].id === array[k]) {
                 listQuizzes.innerHTML += `
                     <li class="quizzContent quizzImageGradient" onclick="quizzSelected(this, ${k});">
@@ -86,7 +83,19 @@ function listOtherQuizzes(response) {
                         <img class="quizzImage" src="${response.data[k].image}">
                     </li>`
             }
-    } 
+    }
+} 
+    
+    if(arrayIdDeserialized === null) {
+        for (let k = 0; k < response.data.length; k++) {
+                listQuizzes.innerHTML += `
+                    <li class="quizzContent quizzImageGradient" onclick="quizzSelected(this, ${k});">
+                        <span class="quizzTitle">${response.data[k].title}</span>
+                        <img class="quizzImage" src="${response.data[k].image}">
+                    </li>`
+            }
+    }
+    createdQuizzes()
 }
 
 getQuizzes();
@@ -773,9 +782,11 @@ function success(response) {
 
 function getMyQuizzes() {
 
-    for(let i = 0; i < arrayIdDeserialized.length; i++) {
-        let promise = axios.get(`${URL_API}/${arrayIdDeserialized[i]}`);
-        promise.then(listMyQuizzes);
+    if(arrayIdDeserialized !== null) {
+        for(let i = 0; i < arrayIdDeserialized.length; i++) {
+            let promise = axios.get(`${URL_API}/${arrayIdDeserialized[i]}`);
+            promise.then(listMyQuizzes);
+        }
     }
 }
 
@@ -801,9 +812,20 @@ function listMyQuizzes(response) {
                             </li>`
                     }
     }
-    
-
-        console.log(thisArray);
         }
 
 getMyQuizzes()
+
+function createdQuizzes() {
+    let myQuizzes = document.querySelector(".myQuizzesList");
+    let createMyQuizz = document.querySelector(".myQuizz");
+    let teste = document.querySelector(".createOtherQuizz");
+
+    if(myQuizzes.innerHTML !== "") {
+        createMyQuizz.classList.add("hide");
+    } 
+
+    if(myQuizzes.innerHTML === "") {
+        teste.style.display = "none";
+    }
+}
