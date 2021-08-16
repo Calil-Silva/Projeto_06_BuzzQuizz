@@ -84,7 +84,9 @@ function listOtherQuizzes(response) {
                     </li>`
             }
     }
+    CreatedQuizzes()
 } 
+
     
     if(arrayIdDeserialized === null) {
         for (let k = 0; k < response.data.length; k++) {
@@ -94,8 +96,8 @@ function listOtherQuizzes(response) {
                         <img class="quizzImage" src="${response.data[k].image}">
                     </li>`
             }
+            nonCreatedQuizzes()
     }
-    createdQuizzes()
 }
 
 getQuizzes();
@@ -816,16 +818,14 @@ function listMyQuizzes(response) {
 
 getMyQuizzes()
 
-function createdQuizzes() {
-    let myQuizzes = document.querySelector(".myQuizzesList");
+function CreatedQuizzes() {
     let createMyQuizz = document.querySelector(".myQuizz");
+
+        createMyQuizz.classList.add("hide");
+}
+
+function nonCreatedQuizzes() {
     let teste = document.querySelector(".createOtherQuizz");
 
-    if(myQuizzes.innerHTML !== "") {
-        createMyQuizz.classList.add("hide");
-    } 
-
-    if(myQuizzes.innerHTML === "") {
         teste.style.display = "none";
-    }
 }
