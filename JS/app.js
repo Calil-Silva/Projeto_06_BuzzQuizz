@@ -398,22 +398,96 @@ function loadInterface(element, type) {
     fillElements(invisibleStructure.querySelector("section"), type);
 }
 
+const createErrorWarning = (element, text, type) => {
+    newElement = document.createElement(type);
+    newElement.classList.add("errorText");
+    newElement.innerHTML = text;
+    element.parentNode.insertBefore(newElement, element.nextSibling);
+}
+
+const isNextScreenAllowed = (formItem) => {
+    if(!formItem.classList.contains("error")){
+        return true;
+    }
+}
+
+const validateQuizInfo = (formItem) => {
+    switch(formItem.classList[0]){
+        case "quizTitle":
+            if(formItem.value.length < 20){
+                if(!formItem.classList.contains("error")){
+                    formItem.classList.add("error");
+                    createErrorWarning(formItem, "O título do quiz deve ter no mínimo 20 caracteres.", "span");
+                }
+            } else if(formItem.value.length > 65){
+                if(!formItem.classList.contains("error")){
+                    formItem.classList.add("error");
+                    createErrorWarning(formItem, "O título do quiz deve ter no máximo 65 caracteres.", "span");
+                }
+            } else{
+                if(formItem.classList.contains("error")){
+                    formItem.classList.remove("error");
+                    formItem.nextSibling.remove("span");
+                }
+
+                quiz.title = formItem.value;
+            } break;
+        case "quizImage":
+            if(!urlValidation(formItem.value)){
+                if(!formItem.classList.contains("error")){
+                    formItem.classList.add("error");
+                    createErrorWarning(formItem, "O valor informado não é uma URL válida.", "span");
+                }
+            } else{
+                if(formItem.classList.contains("error")){
+                    formItem.classList.remove("error");
+                    formItem.nextSibling.remove("span");
+                }
+
+                quiz.image = formItem.value;
+            } break;
+        case "quizNumQuestions":
+            if(formItem.value < 3){
+                if(!formItem.classList.contains("error")){
+                    formItem.classList.add("error");
+                    createErrorWarning(formItem, "O quiz deve ter no mínimo 3 perguntas.", "span");
+                }
+            } else{
+                if(formItem.classList.contains("error")){
+                    formItem.classList.remove("error");
+                    formItem.nextSibling.remove("span");
+                }
+
+                numQuestions = formItem.value;
+            } break;
+
+        case "quizNumLevels":
+            if(formItem.value < 2){
+                if(!formItem.classList.contains("error")){
+                    formItem.classList.add("error");
+                    createErrorWarning(formItem, "O quiz deve ter no mínimo 2 níveis.", "span");
+                }
+            } else{
+                if(formItem.classList.contains("error")){
+                    formItem.classList.remove("error");
+                    formItem.nextSibling.remove("span");
+                }
+
+                numLevels = formItem.value;
+            } break;
+    } 
+}
+
 function validateInput(element) {
     let form = element.closest("section").querySelector("form");
-    switch (form.classList.item(0)) {
+    let className =  form.classList.item(0)
+    switch (className) {
         case "quizInfoForm":
-            if (form[0].value.length < 20 || form[0].value.length > 65 || !urlValidation(form[1].value) || form[2].value < 3 || form[3].value < 2) {
-                alert("Por favor, preencha os dados corretamente.");
-                break;
-            } else {
-                quiz.title = form[0].value;
-                quiz.image = form[1].value;
-                numQuestions = form[2].value;
-                numLevels = form[3].value;
-                loadInterface(element, form.classList.item(0));
+            Array.from(form.elements).forEach(validateQuizInfo);
+            if(Array.from(form.elements).every(isNextScreenAllowed)){
+                loadInterface(element, className);
                 clearInput(form);
-                break;
-            }
+            } break;
         case "quizQuestionsForm":
             let k = 0;
             let j = 0;
@@ -459,6 +533,7 @@ function validateInput(element) {
             alertCounter += form.forEach(validateLevel);
             loadInterface(element, "quizLevelsForm");
             postQuizz();
+            break;
     }
     console.log(quiz)
 }
