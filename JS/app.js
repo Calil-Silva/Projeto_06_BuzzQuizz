@@ -599,16 +599,16 @@ const validateQuizQuestions = (form) => {
                 const correctAnswer = createCorrectAnswer();
                 Array.from(formItem[i].elements).forEach(validateCorrectAnswer.bind(null, correctAnswer));
                 if(Array.from(formItem[i].elements).every(isFillCorrect)){
-                    question.answers.push(correctAnswer);
+                    question.answers.push(correctAnswer)
                 }
                 break;
             case "incorrectAnswer":
-                for(let j = 0; j < 3; j++){
-                    const incorrectAnswer = createIncorrectAnswer1();
-                    Array.from(formItem[i].elements).forEach(validateIncorrectAnswer.bind(null, incorrectAnswer));
-                }
-                if(Array.from(formItem[i].elements).every(isFillCorrect)){
-                    question.answers.push(incorrectAnswer);
+                const incorrectAnswer = [createIncorrectAnswer1(), createIncorrectAnswer2(), createIncorrectAnswer3()];
+                for(let j = 0; j < incorrectAnswer.length; j++){
+                    Array.from(formItem[i].elements).forEach(validateIncorrectAnswer.bind(null, incorrectAnswer[j]));
+                    if(Array.from(formItem[i].elements).every(isFillCorrect)){
+                        question.answers.push(incorrectAnswer[j])
+                    }
                 }
                 break;
         }
@@ -714,7 +714,6 @@ function validateInput(element) {
             form = element.closest("section").querySelectorAll(".quizQuestion");
             form2 = element.closest("section").querySelectorAll("input");
             form.forEach(validateQuizQuestions);
-            console.log(form2)
             if(Array.from(form2).every(isFillCorrect)){
                 loadInterface(element, className);
                 clearInput(form);
