@@ -87,8 +87,9 @@
     <main class="quizzCreationSuccess hide">
         <section class="quizzSuccess">
             <h1 class="quizzSuccessTitle">Seu quizz está pronto!</h1>
-            <button class="quizzInfoButton">Acessar Quizz</button>
-            <button class="quizzInfoButton">Voltar para home</button>
+            <div class="quizzCreated" onchange="getMyLastQuizz();"></div>
+            <button class="quizzInfoButton" onclick="newQuizz(this);">Acessar Quizz</button>
+            <button class="quizzInfoButton" onclick="backHomePage()">Voltar para home</button>
         </section>
     </main>
 

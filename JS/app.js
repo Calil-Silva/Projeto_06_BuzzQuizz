@@ -84,7 +84,7 @@ function listOtherQuizzes(response) {
                     </li>`
             }
     }
-    CreatedQuizzes()
+    CreatedQuizzes();
 } 
 
     
@@ -544,6 +544,9 @@ function validateInput(element) {
             alertCounter += form.forEach(validateLevel);
             loadInterface(element, "quizLevelsForm");
             postQuizz();
+            let imgQuizz = setInterval(getMyLastQuizz, 100);
+            imgQuizz();
+            clearInterval(imgQuizz);
             break;
     }
     console.log(quiz)
@@ -681,8 +684,8 @@ const levelStructrue = function (i) {
             <ion-icon onclick="editQuestion(this)" name="create-outline"></ion-icon>
         </div>
     </div>`
-
     return levels;
+    
 }
 
 const questionsStructure = function (i) {
@@ -721,7 +724,6 @@ const questionsStructure = function (i) {
     </div>`
 
     return questions;
-
 }
 
 function editQuestion(element) {
@@ -792,6 +794,12 @@ function getMyQuizzes() {
     }
 }
 
+function getMyLastQuizz() {
+
+            let promise = axios.get(`${URL_API}/${myIds}`);
+            promise.then(loadImgQuizzCreated);
+}
+
 function listMyQuizzes(response) {
     let listMyQuizz = document.querySelector(".myQuizzesList");
 
@@ -829,3 +837,23 @@ function nonCreatedQuizzes() {
 
         teste.style.display = "none";
 }
+
+function newQuizz(option) {
+    
+    let quizzCreationSuccess = document.querySelector(".quizzCreationSuccess");
+
+    quizzCreationSuccess.classList.add("hide");
+
+    myQuizzSelected(option, myIds);
+}
+
+function loadImgQuizzCreated(response) {
+    let imgQuizz = document.querySelector(".quizzCreated");
+
+    imgQuizz.innerHTML = `
+    <ul><li class="quizzContent quizzImageGradient">
+                                <span class="quizzTitle">${response.data.title}</span>
+                                <img class="quizzImage" src="${response.data.image}"> 
+                            </li></ul>`
+}
+

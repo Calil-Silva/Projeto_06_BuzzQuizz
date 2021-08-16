@@ -225,7 +225,18 @@ ion-icon {
     border-radius: 15px;
     color: #fff;
     font-size: 21px;
-    margin-top: 85px;
+    margin-top: 45px;
+}
+
+.quizzInfoButton.a {
+    font-family: 'Roboto', sans-serif;
+    font-size: 21px;
+    font-weight: 400px;
+    border: none;
+    color: #818181;
+    background-color: #E5E5E5;
+    margin: 15px auto 42px;
+    display: none;
 }
 
 .quizQuestionsFormIncorrect {
@@ -365,6 +376,8 @@ ion-icon {
     display: none;
 }
 
+
+
 .deleteOrEdit {
     background-color: #EC362D;
     display: flex;
@@ -418,6 +431,10 @@ ion-icon {
 .plus img {
     width: 30px;
     height: 30px;
+}
+
+.quizzCreated {
+    margin-top: 46px;
 }
 
 @media (min-width: 1100px) {
