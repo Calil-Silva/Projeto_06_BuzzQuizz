@@ -396,7 +396,8 @@ ion-icon {
     flex-wrap: nowrap;
     justify-content: space-between;
     width: 1051px;
-    
+}
+
 .error{
     background-color: #FFE9E9;
 }
