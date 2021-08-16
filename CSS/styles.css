@@ -364,6 +364,16 @@ ion-icon {
     display: none;
 }
 
+.returnhomePage {
+    font-family: 'Roboto', sans-serif;
+    font-size: 21px;
+    font-weight: 400px;
+    border: none;
+    color: #818181;
+    background-color: #E5E5E5;
+    margin: 15px auto 42px;
+}
+
 .deleteOrEdit {
     background-color: #EC362D;
     display: flex;

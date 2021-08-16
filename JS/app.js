@@ -5,7 +5,6 @@ let rights = 0;
 let score = 0;
 let counterOne = 0;
 let quizzScoreCard;
-let alertCounter = 0;
 let numQuestions;
 let numLevels;
 
@@ -267,10 +266,11 @@ const createErrorWarning = (element, text, type) => {
     element.parentNode.insertBefore(newElement, element.nextSibling);
 }
 
-const isNextScreenAllowed = (formItem) => {
+const isFillCorrect = (formItem) => {
     if(!formItem.classList.contains("error")){
         return true;
     }
+    return false;
 }
 
 const validateQuizInfo = (formItem) => {
@@ -295,7 +295,7 @@ const validateQuizInfo = (formItem) => {
                 quiz.title = formItem.value;
             } break;
         case "quizImage":
-            if(!urlValidation(formItem.value)){
+            if(!isValidURL(formItem.value)){
                 if(!formItem.classList.contains("error")){
                     formItem.classList.add("error");
                     createErrorWarning(formItem, "O valor informado não é uma URL válida.", "span");
@@ -340,165 +340,321 @@ const validateQuizInfo = (formItem) => {
     } 
 }
 
+const validateQuestionHeader = (question, formItem) => {
+    switch(formItem.classList[0]){
+        case "questionText":
+            if(formItem.value.length < 20){
+                if(!formItem.classList.contains("error")){
+                    formItem.classList.add("error");
+                    createErrorWarning(formItem, "O texto da pergunta deve ter no mínimo 20 caracteres.", "span");
+                }
+            }else{
+                if(formItem.classList.contains("error")){
+                    formItem.classList.remove("error");
+                    formItem.nextSibling.remove("span");
+                }
+
+                question.title = formItem.value;
+            } break;
+        case "questionBackgroundColor":
+            if(!isValidHex(formItem.value)){
+                if(!formItem.classList.contains("error")){
+                    formItem.classList.add("error");
+                    createErrorWarning(formItem, "O valor informado não é um HEX válido.", "span");
+                }
+            } else{
+                if(formItem.classList.contains("error")){
+                    formItem.classList.remove("error");
+                    formItem.nextSibling.remove("span");
+                }
+
+                question.color = formItem.value;
+            } break;
+    }
+}
+
+const validateCorrectAnswer = (answer, formItem) => {
+    switch(formItem.classList[0]){
+        case "correctAnswerText":
+            if(formItem.value.length === 0){
+                if(!formItem.classList.contains("error")){
+                    formItem.classList.add("error");
+                    createErrorWarning(formItem, "O texto da resposta não pode estar vazio.", "span");
+                }
+            }else{
+                if(formItem.classList.contains("error")){
+                    formItem.classList.remove("error");
+                    formItem.nextSibling.remove("span");
+                }
+
+                answer.text = formItem.value;
+            } break;
+        case "correctAnswerImage":
+            if(!isValidURL(formItem.value)){
+                if(!formItem.classList.contains("error")){
+                    formItem.classList.add("error");
+                    createErrorWarning(formItem, "O valor informado não é uma URL válida.", "span");
+                }
+            } else{
+                if(formItem.classList.contains("error")){
+                    formItem.classList.remove("error");
+                    formItem.nextSibling.remove("span");
+                }
+
+                answer.image = formItem.value;
+            } break;
+    }
+
+    answer.isCorrectAnswer = true;
+}
+
+const validateIncorrectAnswer = (answer, formItem, index) => {
+    console.log(index)
+    switch(formItem.classList[0]){
+        case "incorrectAnswer":
+            if(formItem.value.length === 0){
+                if(!formItem.classList.contains("error")){
+                    formItem.classList.add("error");
+                    createErrorWarning(formItem, "O texto da resposta não pode estar vazio.", "span");
+                }
+            }else{
+                if(formItem.classList.contains("error")){
+                    formItem.classList.remove("error");
+                    formItem.nextSibling.remove("span");
+                }
+
+                answer.text = formItem.value;
+            } break;
+        case "incorrectURL":
+            if(!isValidURL(formItem.value)){
+                if(!formItem.classList.contains("error")){
+                    formItem.classList.add("error");
+                    createErrorWarning(formItem, "O valor informado não é uma URL válida.", "span");
+                }
+            } else{
+                if(formItem.classList.contains("error")){
+                    formItem.classList.remove("error");
+                    formItem.nextSibling.remove("span");
+                }
+
+                answer.image = formItem.value;
+            } break;
+    }
+
+    answer.isCorrectAnswer = false;
+}
+
+const validateQuizQuestions = (form) => {
+    const question = createQuestion();
+    const formItem = form.querySelectorAll(".quizQuestionsForm");
+    for(let i = 0; i < formItem.length; i++){
+        let className = formItem[i].classList[1];
+        switch(className){
+            case "questionHeader":
+                Array.from(formItem[i].elements).forEach(validateQuestionHeader.bind(null, question));
+                break;
+            case "correctAnswer":
+                const correctAnswer = createCorrectAnswer();
+                Array.from(formItem[i].elements).forEach(validateCorrectAnswer.bind(null, correctAnswer));
+                if(Array.from(formItem[i].elements).every(isFillCorrect)){
+                    question.answers.push(correctAnswer)
+                }
+                break;
+            case "incorrectAnswer":
+                const incorrectAnswer = [createIncorrectAnswer1(), createIncorrectAnswer2(), createIncorrectAnswer3()];
+                for(let j = 0; j < incorrectAnswer.length; j++){
+                    Array.from(formItem[i].elements).forEach(validateIncorrectAnswer.bind(null, incorrectAnswer[j]));
+                    if(Array.from(formItem[i].elements).every(isFillCorrect)){
+                        question.answers.push(incorrectAnswer[j])
+                    }
+                }
+                break;
+        }
+    }
+    quiz.questions.push(question);
+    console.log(quiz)
+}
+
+const validateQuizLevels = (level, formItem) => {
+    switch(formItem.classList[0]){
+        case "levelTitle":
+            if(formItem.value.length < 10){
+                if(!formItem.classList.contains("error")){
+                    formItem.classList.add("error");
+                    createErrorWarning(formItem, "O texto do nível deve ter no mínimo 10 caracteres.", "span");
+                }
+            }else{
+                if(formItem.classList.contains("error")){
+                    formItem.classList.remove("error");
+                    formItem.nextSibling.remove("span");
+                }
+
+                level.title = formItem.value;
+
+            } break;
+       case "levelPercentage":
+            if(formItem.value > 100){
+                if(!formItem.classList.contains("error")){
+                    formItem.classList.add("error");
+                    createErrorWarning(formItem, "A porcentagem de acerto mínima não deve ultrapassar o valor de 100%.", "span");
+                }
+            }else if(formItem.value < 0){
+                if(!formItem.classList.contains("error")){
+                    formItem.classList.add("error");
+                    createErrorWarning(formItem, "A porcentagem de acerto mínima não deve ser inferior a 100%.", "span");
+                }
+            }else if(formItem.value === ""){
+                if(!formItem.classList.contains("error")){
+                    formItem.classList.add("error");
+                    createErrorWarning(formItem, "A porcentagem de acerto mínima não deve estar vazia", "span");
+                }
+            }else{
+                if(formItem.classList.contains("error")){
+                    formItem.classList.remove("error");
+                    formItem.nextSibling.remove("span");
+                }
+
+                level.minValue = formItem.value;
+
+            } break;
+        case "levelImage":
+            if(!isValidURL(formItem.value)){
+                if(!formItem.classList.contains("error")){
+                    formItem.classList.add("error");
+                    createErrorWarning(formItem, "O valor informado não é uma URL válida.", "span");
+                }
+            } else{
+                if(formItem.classList.contains("error")){
+                    formItem.classList.remove("error");
+                    formItem.nextSibling.remove("span");
+                }
+
+                level.image = formItem.value;
+
+            } break;
+        case "levelDescription":
+            if(formItem.value.length < 30){
+                if(!formItem.classList.contains("error")){
+                    formItem.classList.add("error");
+                    createErrorWarning(formItem, "A descrição do nível deve ter no mínimo 30 caracteres.", "span");
+                }
+            }else{
+                if(formItem.classList.contains("error")){
+                    formItem.classList.remove("error");
+                    formItem.nextSibling.remove("span");
+                }
+
+                level.text = formItem.value;
+
+            } break;
+    }
+}
+
+function validateQuizLevel(form){
+    const level = createLevel();
+    Array.from(form).forEach(validateQuizLevels.bind(null, level));
+    if(Array.from(form).every(isFillCorrect)){
+        quiz.levels.push(level);
+    }
+    
+}
+
 function validateInput(element) {
     let form = element.closest("section").querySelector("form");
     let className =  form.classList.item(0)
     switch (className) {
         case "quizInfoForm":
             Array.from(form.elements).forEach(validateQuizInfo);
-            if(Array.from(form.elements).every(isNextScreenAllowed)){
+            if(Array.from(form.elements).every(isFillCorrect)){
                 loadInterface(element, className);
                 clearInput(form);
             } break;
         case "quizQuestionsForm":
-            let k = 0;
-            let j = 0;
-            let l = 0;
-            form = element.closest("section").querySelectorAll(".quizQuestionsForm");
-            for(let i = 0; i < form.length; i++){
-                const questions = {
-                    title: "",
-                    color: "",
-                    answers: []
-                }
-                const answers = {
-                    text: "",
-                    image: "",
-                    isCorrectAnswer: ""
-                }
-                if(form[i].classList.contains("questionText")){
-                    quiz.questions.push(questions);
-                    alertCounter += validateQuestionText(form[i][0].value, k);
-                    alertCounter += validateBackgroundColor(form[i][1].value, k);
-                    k++;
-                } else if(form[i].classList.contains("answerCorrect")){
-                    quiz.questions[j].answers.push(answers);
-                    alertCounter += validateCorrectAnswerText(form[i][0].value, j);
-                    alertCounter += validateCorrectAnswerImage(form[i][1].value, j);
-                    j++;
-                } else if(form[i].classList.contains("incorrectAnswer")){          
-                    alertCounter += validateIncorrectAnswer(form[i], l);
-                    l++;
-                }
-            }
-            if(alertCounter === 0){
-                loadInterface(element, "quizQuestionsForm");
-                alertCounter = 0;
-            }else{
-                console.log(alertCounter)
-                alert("Por favor, preencha os dados corretamente.");
-                alertCounter = 0;
-            }
-            break;
+            form = element.closest("section").querySelectorAll(".quizQuestion");
+            form.forEach(validateQuizQuestions);
+            if(Array.from(form).every(isFillCorrect)){
+                loadInterface(element, className);
+                clearInput(form);
+            } break;
         case "quizLevelsForm":
             form = element.closest("section").querySelectorAll(".quizLevelsForm");
-            alertCounter += form.forEach(validateLevel);
-            loadInterface(element, "quizLevelsForm");
-            postQuizz();
-            break;
+            form2 = element.closest("section").querySelectorAll("input");
+            form.forEach(validateQuizLevel);
+            if(Array.from(form2).every(isFillCorrect)){
+                loadInterface(element, className);
+                clearInput(form);
+                postQuizz();
+            } break;
     }
-    console.log(quiz)
 }
-
-function validateLevel(form){
-    if(form[0].value < 10 || form[1].value < 0 || form[1].value > 100 || !urlValidation(form[2].value) || form[3].value < 30){
-        return 1;
-    }else{
-        createLevel(form[0].value, form[2].value, form[3].value, form[1].value);
-        return 0;
-    }
-    
-}
-
-function createLevel(title, image, text, minValue){
+function createLevel(){
     const level = {
-        title,
-        image,
-        text,
-        minValue
+        title: "",
+        image: "",
+        text: "",
+        minValue: 0
     }
 
-    quiz.levels.push(level);
+    return level;
+}
+function createQuestion(){
+    const question = {
+        title: "",
+        color: "",
+        answers: []
+    }
+
+    return question;
 }
 
-function validateIncorrectAnswer(input, questionIndex){
-    if(input[0].value === "" || input[1].value === "" && questionIndex === 0){
-        return 1;
-    }else{
-        createAnswer(questionIndex, input[0].value, input[1].value, false);
-        return 0;
+function createCorrectAnswer(){
+    const answer = {
+        text: "",
+        image: "",
+        isCorrectAnswer: true
     }
+
+    return answer;
+
 }
 
-function createAnswer(questionIndex, text, image, answer){
-    const answers = {
-        text: text,
-        image: image,
-        isCorrectAnswer: answer
+
+function createIncorrectAnswer1(){
+    const answer = {
+        text: "",
+        image: "",
+        isCorrectAnswer: false
     }
 
-    quiz.questions[questionIndex].answers.push(answers);
+    return answer;
+
+}
+
+function createIncorrectAnswer2(){
+    const answer = {
+        text: "",
+        image: "",
+        isCorrectAnswer: false
+    }
+
+    return answer;
+
+}
+
+function createIncorrectAnswer3(){
+    const answer = {
+        text: "",
+        image: "",
+        isCorrectAnswer: false
+    }
+
+    return answer;
 
 }
 
 function clearInput(form){
     for(let i = 0; i < form.length; i++){
         form[i].value = "";
-    }
-}
-
-function validateIncorrectAnswerText(input, i, m){
-    if(input.length === 0){
-        return 1;
-    }else{
-        quiz.questions[i].answers[m].text = input;
-        quiz.questions[i].answers[m].isCorrectAnswer = false;
-        return 0;                                                              
-    }
-}
-
-function validateQuestionText(input, k){
-    if(input.length < 20){
-        return 1;
-    }else{
-        quiz.questions[k].title = input;
-        return 0;                                              
-    }
-}
-
-function validateCorrectAnswerText(input, i){
-    if(input.length === 0){
-        return 1;
-    }else{
-        quiz.questions[i].answers[0].text = input;
-        quiz.questions[i].answers[0].isCorrectAnswer = true;
-        return 0;                                                              
-    }
-}
-
-function validateCorrectAnswerImage(input, i){
-    if(!urlValidation(input)){
-        return 1;
-    }else{
-        quiz.questions[i].answers[0].image = input;
-        return 0;                                                      
-    }
-}
-
-function validateInorrectAnswerImage(input, i, m){
-    if(!urlValidation(input)){
-        return 1;
-    }else{
-        quiz.questions[i].answers[m].image = input;
-        return 0;                                                      
-    }
-}
-
-function alertInputValidation() {
-    if (alertCounter === 0) {
-        alert("Por favor, preencha os dados corretamente.");
-    } else{
-        return;
     }
 }
 
@@ -523,10 +679,10 @@ const levelStructrue = function (i) {
             <h1 class="quizLevelsFormTitle">Nível ${i + 1}</h1>
             <div class="hide">
                 <form class="quizLevelsForm">
-                    <input type="text" placeholder="   Título do nível" />
-                    <input type="text" placeholder="   % de acerto mínima" />
-                    <input type="url" placeholder="   URL da imagem do nível" />
-                    <input type="text" placeholder="   Descrição do nível" />
+                    <input class="levelTitle" type="text" placeholder="   Título do nível" />
+                    <input class="levelPercentage" type="number" min="0" step="1" placeholder="   % de acerto mínima" />
+                    <input class="levelImage" type="url" placeholder="   URL da imagem do nível" />
+                    <input class="levelDescription" type="text" placeholder="   Descrição do nível" />
                 </form>
             </div>
             <ion-icon onclick="editQuestion(this)" name="create-outline"></ion-icon>
@@ -541,29 +697,29 @@ const questionsStructure = function (i) {
         `<div class="quizzQuestionContainer">
         <div class="quizQuestionsFormUnfolded">
             <h1 class="quizQuestionsFormTitle">Pergunta ${i + 1}</h1>
-            <div class="hide">
-                <form class="quizQuestionsForm questionText">
-                    <input type="text" placeholder="   Texto da pergunta" />
-                    <input type="text" placeholder="   Cor de fundo da pergunta" />
+            <div class="quizQuestion hide">
+                <form class="quizQuestionsForm questionHeader">
+                    <input class = "questionText" type="text" placeholder="   Texto da pergunta" value="Texto da pergunta Texto da pergunta ${i+1}"/>
+                    <input class = "questionBackgroundColor" type="text" placeholder="   Cor de fundo da pergunta" value="#AAAAAA"/>
                 </form>
                 <h1 class="quizQuestionsFormTitle">Resposta correta</h1>
-                <form class="quizQuestionsForm answerCorrect">
-                    <input type="text" placeholder="   Resposta correta" />
-                    <input type="url" placeholder="   URL da imagem" />
+                <form class="quizQuestionsForm correctAnswer">
+                    <input class = "correctAnswerText" type="text" placeholder="   Resposta correta" value="${i+1}"/>
+                    <input class = "correctAnswerImage" type="url" placeholder="   URL da imagem" value="https://developer.mozilla.org/en-US/docs/Web/API/URL/URL/">
                 </form>
                 <h1 class="quizQuestionsFormTitle">Respostas incorretas</h1>
                 <form class="quizQuestionsForm incorrectAnswer">
                     <div class="quizQuestionsFormIncorrect">
-                        <input type="text" placeholder="   Resposta incorreta 1" />
-                        <input type="url" placeholder="   URL da imagem 1" />
+                        <input class="incorrectAnswer" type="text" placeholder="   Resposta incorreta 1" value="${i+1}" />
+                        <input class="incorrectURL" type="url" placeholder="   URL da imagem 1" value="https://developer.mozilla.org/en-US/docs/Web/API/URL/URL/"/>
                     </div>
                     <div class="quizQuestionsFormIncorrect">
-                        <input type="text" placeholder="   Resposta incorreta 2" />
-                        <input type="url" placeholder="   URL da imagem 2" />
+                        <input class="incorrectAnswer" "type="text" placeholder="   Resposta incorreta 2" value="${i+1}"/>
+                        <input class="incorrectURL" type="url" placeholder="   URL da imagem 2" value="https://developer.mozilla.org/en-US/docs/Web/API/URL/URL/"/>
                     </div>
                     <div class="quizQuestionsFormIncorrect">
-                        <input type="text" placeholder="   Resposta incorreta 3" />
-                        <input type="url" placeholder="   URL da imagem 3" />
+                        <input class="incorrectAnswer" type="text" placeholder="   Resposta incorreta 3" value="${i+1}"/>
+                        <input class="incorrectURL" type="url" placeholder="   URL da imagem 3" value="https://developer.mozilla.org/en-US/docs/Web/API/URL/URL/"/>
                     </div>
                 </form>
             </div>
@@ -592,7 +748,7 @@ function editQuestion(element) {
     element.classList.add("hide");
 }
 
-function urlValidation(str) {
+function isValidURL(str) {
     try {
         new URL(str);
     }
@@ -602,13 +758,11 @@ function urlValidation(str) {
     return true;
 }
 
-function validateBackgroundColor(input, i){
+function isValidHex(input, i){
     if(!/^#((0x){0,1}|#{0,1})([0-9A-F]{8}|[0-9A-F]{6})$/.test(input)){
-        return 1;
-    }else{
-        quiz.questions[i].color = input;
-        return 0;
+        return false;
     }
+    return true;
 }
 
 function postQuizz(){
