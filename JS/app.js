@@ -9,6 +9,16 @@ let alertCounter = 0;
 let numQuestions;
 let numLevels;
 
+let array = [];
+let myArray = [];
+let thisArray = [];
+
+let myIds;
+
+let arrayIds = [];
+
+let arrayIdDeserialized = JSON.parse(localStorage.getItem("array"));
+
 const quiz = {
     title: "",
     image: "",
@@ -42,20 +52,27 @@ function listOtherQuizzes(response) {
     let listQuizzes = document.querySelector(".otherQuizzes");
 
     for (let i = 0; i < response.data.length; i++) {
-        listQuizzes.innerHTML += `
-        <li class="quizzContent quizzImageGradient" onclick="quizzSelected(this, ${i});">
-            <span class="quizzTitle">${response.data[i].title}</span>
-            <img class="quizzImage" src="${response.data[i].image}">
-            <div class="deleteOrEdit">
-                <div class="edit" id="e${i}">
-                <img src="./files/Group 51.svg">
-                </div>
-                <div class="delete" id="d${i}" onclick="deleteQuizz(this, ${i});">
-                <img src="./files/Group.svg" id="delete${i}">
-                </div>
-            </div>
-        </li>`
+        array.push(response.data[i].id);
+        myArray.push(response.data[i].id);
     }
+
+    for(let i = 0; i < arrayIdDeserialized.length; i++) {
+        let indx = array.indexOf(arrayIdDeserialized[i]);
+        array[indx] = "";
+    }
+
+    console.log(myArray)
+    
+
+    for (let k = 0; k < response.data.length; k++) {
+            if(response.data[k].id === array[k]) {
+                listQuizzes.innerHTML += `
+                    <li class="quizzContent quizzImageGradient" onclick="quizzSelected(this, ${k});">
+                        <span class="quizzTitle">${response.data[k].title}</span>
+                        <img class="quizzImage" src="${response.data[k].image}">
+                    </li>`
+            }
+    } 
 }
 
 getQuizzes();
@@ -233,6 +250,7 @@ function restartQuizz() {
     let homePageButton = document.querySelector(".homePage");
 
     rights = 0;
+    score = 0;
     counterOne = 0;
 
 
@@ -281,7 +299,7 @@ function validateInput(element) {
             let j = 0;
             let l = 0;
             form = element.closest("section").querySelectorAll(".quizQuestionsForm");
-            for(let i = 0; i < form.length; i++){
+            for (let i = 0; i < form.length; i++) {
                 const questions = {
                     title: "",
                     color: "",
@@ -292,25 +310,25 @@ function validateInput(element) {
                     image: "",
                     isCorrectAnswer: ""
                 }
-                if(form[i].classList.contains("questionText")){
+                if (form[i].classList.contains("questionText")) {
                     quiz.questions.push(questions);
                     alertCounter += validateQuestionText(form[i][0].value, k);
                     alertCounter += validateBackgroundColor(form[i][1].value, k);
                     k++;
-                } else if(form[i].classList.contains("answerCorrect")){
+                } else if (form[i].classList.contains("answerCorrect")) {
                     quiz.questions[j].answers.push(answers);
                     alertCounter += validateCorrectAnswerText(form[i][0].value, j);
                     alertCounter += validateCorrectAnswerImage(form[i][1].value, j);
                     j++;
-                } else if(form[i].classList.contains("incorrectAnswer")){          
+                } else if (form[i].classList.contains("incorrectAnswer")) {
                     alertCounter += validateIncorrectAnswer(form[i], l);
                     l++;
                 }
             }
-            if(alertCounter === 0){
+            if (alertCounter === 0) {
                 loadInterface(element, "quizQuestionsForm");
                 alertCounter = 0;
-            }else{
+            } else {
                 console.log(alertCounter)
                 alert("Por favor, preencha os dados corretamente.");
                 alertCounter = 0;
@@ -325,17 +343,17 @@ function validateInput(element) {
     console.log(quiz)
 }
 
-function validateLevel(form){
-    if(form[0].value < 10 || form[1].value < 0 || form[1].value > 100 || !urlValidation(form[2].value) || form[3].value < 30){
+function validateLevel(form) {
+    if (form[0].value < 10 || form[1].value < 0 || form[1].value > 100 || !urlValidation(form[2].value) || form[3].value < 30) {
         return 1;
-    }else{
+    } else {
         createLevel(form[0].value, form[2].value, form[3].value, form[1].value);
         return 0;
     }
-    
+
 }
 
-function createLevel(title, image, text, minValue){
+function createLevel(title, image, text, minValue) {
     const level = {
         title,
         image,
@@ -346,16 +364,16 @@ function createLevel(title, image, text, minValue){
     quiz.levels.push(level);
 }
 
-function validateIncorrectAnswer(input, questionIndex){
-    if(input[0].value === "" || input[1].value === "" && questionIndex === 0){
+function validateIncorrectAnswer(input, questionIndex) {
+    if (input[0].value === "" || input[1].value === "" && questionIndex === 0) {
         return 1;
-    }else{
+    } else {
         createAnswer(questionIndex, input[0].value, input[1].value, false);
         return 0;
     }
 }
 
-function createAnswer(questionIndex, text, image, answer){
+function createAnswer(questionIndex, text, image, answer) {
     const answers = {
         text: text,
         image: image,
@@ -366,75 +384,75 @@ function createAnswer(questionIndex, text, image, answer){
 
 }
 
-function clearInput(form){
-    for(let i = 0; i < form.length; i++){
+function clearInput(form) {
+    for (let i = 0; i < form.length; i++) {
         form[i].value = "";
     }
 }
 
-function validateIncorrectAnswerText(input, i, m){
-    if(input.length === 0){
+function validateIncorrectAnswerText(input, i, m) {
+    if (input.length === 0) {
         return 1;
-    }else{
+    } else {
         quiz.questions[i].answers[m].text = input;
         quiz.questions[i].answers[m].isCorrectAnswer = false;
-        return 0;                                                              
+        return 0;
     }
 }
 
-function validateQuestionText(input, k){
-    if(input.length < 20){
+function validateQuestionText(input, k) {
+    if (input.length < 20) {
         return 1;
-    }else{
+    } else {
         quiz.questions[k].title = input;
-        return 0;                                              
+        return 0;
     }
 }
 
-function validateCorrectAnswerText(input, i){
-    if(input.length === 0){
+function validateCorrectAnswerText(input, i) {
+    if (input.length === 0) {
         return 1;
-    }else{
+    } else {
         quiz.questions[i].answers[0].text = input;
         quiz.questions[i].answers[0].isCorrectAnswer = true;
-        return 0;                                                              
+        return 0;
     }
 }
 
-function validateCorrectAnswerImage(input, i){
-    if(!urlValidation(input)){
+function validateCorrectAnswerImage(input, i) {
+    if (!urlValidation(input)) {
         return 1;
-    }else{
+    } else {
         quiz.questions[i].answers[0].image = input;
-        return 0;                                                      
+        return 0;
     }
 }
 
-function validateInorrectAnswerImage(input, i, m){
-    if(!urlValidation(input)){
+function validateInorrectAnswerImage(input, i, m) {
+    if (!urlValidation(input)) {
         return 1;
-    }else{
+    } else {
         quiz.questions[i].answers[m].image = input;
-        return 0;                                                      
+        return 0;
     }
 }
 
 function alertInputValidation() {
     if (alertCounter === 0) {
         alert("Por favor, preencha os dados corretamente.");
-    } else{
+    } else {
         return;
     }
 }
 
-function fillElements(element, type){
-    if(type === "quizInfoForm"){
-        for(let i = 0; i < numQuestions; i++){
+function fillElements(element, type) {
+    if (type === "quizInfoForm") {
+        for (let i = 0; i < numQuestions; i++) {
             element.innerHTML += questionsStructure(i);
         }
         element.innerHTML += `<button class="quizzInfoButton" onclick="validateInput(this)">Prosseguir para criar níveis</button>`
-    }else if(type === "quizQuestionsForm"){
-        for(let i = 0; i < numLevels; i++){
+    } else if (type === "quizQuestionsForm") {
+        for (let i = 0; i < numLevels; i++) {
             element.innerHTML += levelStructrue(i);
         }
         element.innerHTML += `<button class="quizzInfoButton" onclick="validateInput(this)">Finalizar Quizz</button>`
@@ -527,21 +545,71 @@ function urlValidation(str) {
     return true;
 }
 
-function validateBackgroundColor(input, i){
-    if(!/^#((0x){0,1}|#{0,1})([0-9A-F]{8}|[0-9A-F]{6})$/.test(input)){
+function validateBackgroundColor(input, i) {
+    if (!/^#((0x){0,1}|#{0,1})([0-9A-F]{8}|[0-9A-F]{6})$/.test(input)) {
         return 1;
-    }else{
+    } else {
         quiz.questions[i].color = input;
         return 0;
     }
 }
 
-function postQuizz(){
+function postQuizz() {
     let promisse = axios.post(`${URL_API}`, quiz)
         .then(success)
         .catch();
 }
 
-function success(response){
-    console.log(response)
+function success(response) {
+
+    myIds = response.data.id;
+
+    if (JSON.parse(localStorage.getItem("array")) !== null) {
+        arrayIds = JSON.parse(localStorage.getItem("array"));
+        arrayIds.push(myIds);
+    } else {
+        arrayIds.push(myIds);
+    }
+
+    let arrayIdSerialized = JSON.stringify(arrayIds);
+
+    localStorage.setItem("array", arrayIdSerialized);
 }
+
+function getMyQuizzes() {
+
+    for(let i = 0; i < arrayIdDeserialized.length; i++) {
+        let promise = axios.get(`${URL_API}/${arrayIdDeserialized[i]}`);
+        promise.then(listMyQuizzes);
+    }
+}
+
+function listMyQuizzes(response) {
+    let listMyQuizz = document.querySelector(".myQuizz");
+
+    listMyQuizz.innerHTML = "";
+
+
+
+    thisArray.push(response.data)
+
+    for (let k = 0; k < arrayIdDeserialized.length; k++) {
+                    listMyQuizz.innerHTML += `
+                        <li class="quizzContent quizzImageGradient" onclick="quizzSelected(this, ${k});">
+                            <span class="quizzTitle">${thisArray[k].title}</span>
+                            <img class="quizzImage" src="${thisArray[k].image}">
+                            <div class="deleteOrEdit">
+                                <div class="edit" id="e${k}">
+                                <img src="./files/Group 51.svg">
+                                </div>
+                                <div class="delete" id="d${k}" onclick="deleteQuizz(this, ${k});">
+                                <img src="./files/Group.svg" id="delete${k}">
+                                </div>
+                            </div>
+                        </li>`
+                }
+
+        console.log(thisArray);
+        }
+
+getMyQuizzes()
